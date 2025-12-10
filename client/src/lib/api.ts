@@ -45,3 +45,12 @@ export async function fetchCountries() {
   if (!res.ok) throw new Error('Failed to fetch countries');
   return res.json();
 }
+
+export async function fetchUserDetails(userId: string) {
+  const res = await fetch(`${API_BASE}/users/${userId}`);
+  if (!res.ok) {
+    if (res.status === 404) throw new Error('User not found');
+    throw new Error('Failed to fetch user details');
+  }
+  return res.json();
+}

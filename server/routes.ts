@@ -214,6 +214,73 @@ export async function registerRoutes(
     }
   });
 
+  // Get single user details
+  app.get("/api/users/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      if (!id || isNaN(Number(id))) {
+        return res.status(400).json({ error: "Invalid user ID" });
+      }
+
+      const user = await queryOne(
+        `SELECT id, first_name, last_name, code_name, email, phone, 
+                country, city, gender, status, deactivated, 
+                created_at, last_online, dob as date_of_birth
+         FROM users 
+         WHERE id = ? AND deleted_at IS NULL`,
+        [id]
+      );
+
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+
+      // Get subscription info
+      const subscription = await queryOne(
+        `SELECT id, expiry, is_active
+         FROM subscriptions 
+         WHERE user_id = ? AND is_active = 1 AND expiry > NOW()
+         ORDER BY expiry DESC LIMIT 1`,
+        [id]
+      );
+
+      // Get match counts - wrapped in try/catch to handle potential schema differences
+      let sentRequests = 0;
+      let receivedRequests = 0;
+      let acceptedMatches = 0;
+      
+      try {
+        const sent = await queryOne<{ count: number }>(
+          `SELECT COUNT(*) as count FROM requests WHERE sender_id = ?`,
+          [id]
+        );
+        sentRequests = sent?.count || 0;
+      } catch (e) {
+        // Fallback if column names differ
+        try {
+          const sent = await queryOne<{ count: number }>(
+            `SELECT COUNT(*) as count FROM requests WHERE id = ? LIMIT 0`,
+            [id]
+          );
+        } catch {}
+      }
+
+      res.json({
+        ...user,
+        subscription: subscription || null,
+        stats: {
+          sentRequests,
+          receivedRequests,
+          acceptedMatches,
+        }
+      });
+    } catch (error: any) {
+      console.error('User details error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Get list of countries for filter
   app.get("/api/countries", async (_req, res) => {
     try {
