@@ -1,247 +1,188 @@
 import { Sidebar } from "@/components/layout/Sidebar";
-import { StatCard } from "@/components/dashboard/StatCard";
-import { DailySignupsChart, UserEngagementChart, CountryGenderChart } from "@/components/dashboard/Charts";
-import { kpiData, signupsData, activeUserEngagementData, countryDistribution, topUsers, verificationQueue } from "@/lib/mockData";
-import { 
-  Users, 
-  UserPlus, 
-  Activity, 
-  Crown, 
-  HeartHandshake, 
-  Scale, 
-  ClipboardCheck, 
-  UserX,
-  Calendar as CalendarIcon,
-  Globe,
-  Download,
-  ArrowRight,
-  TrendingUp,
-  UserCheck
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { kpiData, topUsers, verificationQueue } from "@/lib/mockData";
 import { Link } from "wouter";
 
 export default function Dashboard() {
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="relative flex h-auto min-h-screen w-full bg-off-white font-sans text-text-dark antialiased">
       <Sidebar />
       
-      <main className="flex-1 overflow-y-auto h-screen bg-slate-50/50">
-        <div className="container mx-auto p-4 md:p-8 space-y-8">
-          
-          {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <h2 className="text-3xl font-bold tracking-tight text-foreground">Lahmee Founder Dashboard</h2>
-              <p className="text-muted-foreground mt-1">Overview of key metrics and platform growth.</p>
-            </div>
-            
-            <div className="flex items-center gap-2">
-              <div className="flex items-center bg-white rounded-md border shadow-sm p-1">
-                <Button variant="ghost" size="sm" className="h-8 rounded-sm text-xs font-medium">Last 7 Days</Button>
-                <Button variant="secondary" size="sm" className="h-8 rounded-sm text-xs font-medium bg-slate-100 text-slate-900">Last 30 Days</Button>
-                <Button variant="ghost" size="sm" className="h-8 rounded-sm text-xs font-medium">Last 90 Days</Button>
-              </div>
-              
-              <Select defaultValue="all">
-                <SelectTrigger className="w-[140px] bg-white border-slate-200">
-                  <Globe className="mr-2 h-4 w-4 text-muted-foreground" />
-                  <SelectValue placeholder="Country" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All Countries</SelectItem>
-                  <SelectItem value="in">India</SelectItem>
-                  <SelectItem value="us">USA</SelectItem>
-                  <SelectItem value="uk">UK</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+      <main className="flex-1 overflow-y-auto p-4 md:p-10">
+        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
+          <h1 className="text-3xl md:text-5xl font-extrabold leading-tight tracking-[-0.04em] text-text-dark">Your Growth Story</h1>
+          <div className="flex gap-3 flex-wrap">
+            <button className="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white px-4 py-2 text-text-medium border border-border-light shadow-sm hover:border-gray-300 transition-colors">
+              <span className="material-symbols-outlined text-base">calendar_today</span>
+              <p className="text-sm font-medium leading-normal">Last 90 Days</p>
+              <span className="material-symbols-outlined text-base">arrow_drop_down</span>
+            </button>
+            <button className="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white px-4 py-2 text-text-medium border border-border-light shadow-sm hover:border-gray-300 transition-colors">
+              <span className="material-symbols-outlined text-base">public</span>
+              <p className="text-sm font-medium leading-normal">All Countries</p>
+              <span className="material-symbols-outlined text-base">arrow_drop_down</span>
+            </button>
           </div>
-
-          {/* KPI Cards Row 1 - High Level */}
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
-            <StatCard 
-              title="Total Users" 
-              value={kpiData.totalUsers.toLocaleString()} 
-              icon={TrendingUp}
-              trend={{ value: 12 }}
-              borderColor="blue"
-            />
-            <StatCard 
-              title="Signups Today" 
-              value={kpiData.signupsToday} 
-              icon={UserPlus}
-              trend={{ value: 8 }}
-              borderColor="yellow"
-            />
-            <StatCard 
-              title="Active 30D" 
-              value={kpiData.active30d.toLocaleString()} 
-              icon={Activity}
-              trend={{ value: 5 }}
-              borderColor="teal"
-            />
-            <StatCard 
-              title="Active Premium" 
-              value={kpiData.activePremium.toLocaleString()} 
-              icon={Crown}
-              trend={{ value: 8 }}
-              borderColor="navy"
-            />
-            <StatCard 
-              title="Total Matches" 
-              value={kpiData.totalMatches.toLocaleString()} 
-              icon={HeartHandshake}
-              description="3.1M All time"
-              borderColor="red"
-            />
-          </div>
-
-          {/* KPI Cards Row 2 - Operational Ratios */}
-          <div className="grid gap-6 md:grid-cols-4">
-            <StatCard 
-              title="Women : Men Ratio" 
-              value="1.2 : 1" 
-              icon={Scale}
-              borderColor="blue"
-              className="bg-blue-50/50"
-            />
-            <StatCard 
-              title="Verification Queue" 
-              value={kpiData.verificationQueue.toLocaleString()} 
-              icon={ClipboardCheck}
-              borderColor="default"
-              className="bg-white"
-            />
-             <StatCard 
-              title="Verified Users" 
-              value="89,000" 
-              icon={UserCheck}
-              borderColor="navy"
-              className="bg-white"
-            />
-            <StatCard 
-              title="Deactivated Users" 
-              value={kpiData.deactivatedUsers} 
-              icon={UserX}
-              borderColor="red"
-              className="bg-red-50/50"
-            />
-          </div>
-
-          {/* Charts Row */}
-          <div className="grid gap-6 md:grid-cols-2">
-            <DailySignupsChart data={signupsData} title="Daily Signups (30-90 days)" />
-            <UserEngagementChart data={activeUserEngagementData} title="DAU vs MAU (last 90 days)" />
-          </div>
-
-          <div className="grid gap-6 md:grid-cols-7">
-            {/* Bar Chart */}
-            <div className="col-span-3">
-               <CountryGenderChart data={countryDistribution} title="Active Users by Country & Gender" />
-            </div>
-
-            {/* Top Users Table */}
-            <Card className="col-span-4 border-none shadow-sm">
-              <CardHeader className="flex flex-row items-center justify-between pb-2 bg-slate-50/50 border-b border-slate-100 rounded-t-xl">
-                <CardTitle className="text-base font-semibold text-slate-800">Top 20 Most Active Users</CardTitle>
-                <Button variant="ghost" size="sm" className="text-xs text-brand-blue hover:text-brand-blue/80">View All</Button>
-              </CardHeader>
-              <CardContent className="p-0">
-                <div className="overflow-auto h-[320px]">
-                  <Table>
-                    <TableHeader className="bg-slate-50 sticky top-0 z-10">
-                      <TableRow className="border-b border-slate-100 hover:bg-slate-50">
-                        <TableHead className="w-[180px] font-medium text-slate-500">User</TableHead>
-                        <TableHead className="font-medium text-slate-500">Location</TableHead>
-                        <TableHead className="font-medium text-slate-500">Status</TableHead>
-                        <TableHead className="text-right font-medium text-slate-500">Activity Score</TableHead>
-                        <TableHead className="w-[50px]"></TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {topUsers.map((user) => (
-                        <TableRow key={user.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
-                          <TableCell className="font-medium py-3">
-                            <div className="flex flex-col">
-                              <span className="text-slate-900 font-medium">{user.name}</span>
-                              <span className="text-xs text-slate-400">ID: #{user.id.toString().padStart(4, '0')}</span>
-                            </div>
-                          </TableCell>
-                          <TableCell className="text-slate-600">{user.location}</TableCell>
-                          <TableCell>
-                            <Badge variant={user.status === 'Premium' ? 'default' : 'secondary'} 
-                                   className={user.status === 'Premium' ? "bg-brand-navy hover:bg-brand-navy/90" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}>
-                              {user.status}
-                            </Badge>
-                          </TableCell>
-                          <TableCell className="text-right font-medium text-slate-700">{user.activityScore}</TableCell>
-                          <TableCell>
-                            <Link href={`/users/${user.id}`}>
-                              <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-brand-blue">
-                                <ArrowRight className="h-4 w-4" />
-                              </Button>
-                            </Link>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Verification Queue Table */}
-          <Card className="border-none shadow-sm">
-            <CardHeader className="bg-slate-50/50 border-b border-slate-100 rounded-t-xl pb-3">
-              <CardTitle className="text-base font-semibold text-slate-800">New Users Waiting Verification</CardTitle>
-            </CardHeader>
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader className="bg-slate-50">
-                  <TableRow className="border-b border-slate-100 hover:bg-slate-50">
-                    <TableHead className="font-medium text-slate-500">User ID</TableHead>
-                    <TableHead className="font-medium text-slate-500">Name</TableHead>
-                    <TableHead className="font-medium text-slate-500">Signup Date</TableHead>
-                    <TableHead className="font-medium text-slate-500">Verification Status</TableHead>
-                    <TableHead className="text-right font-medium text-slate-500">Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {verificationQueue.map((user) => (
-                    <TableRow key={user.id} className="border-b border-slate-50 hover:bg-slate-50/50">
-                      <TableCell className="font-mono text-xs text-slate-500">USR-{user.id}</TableCell>
-                      <TableCell className="font-medium text-slate-900">{user.name}</TableCell>
-                      <TableCell className="text-slate-600">{user.submitted}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50">Pending Review</Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                         <Link href={`/users/${user.id}`}>
-                            <Button size="sm" variant="outline" className="h-8 text-slate-600 hover:text-brand-blue hover:border-brand-blue">
-                              Review Details
-                            </Button>
-                         </Link>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
         </div>
+
+        <div className="bg-gradient-to-br from-soft-peach to-muted-teal p-6 md:p-10 rounded-2xl shadow-lg mb-10 relative overflow-hidden">
+          <div className="absolute inset-0 bg-repeat opacity-10" style={{ backgroundImage: "url('data:image/svg+xml,%3Csvg width=\\'20\\' height=\\'20\\' viewBox=\\'0 0 20 20\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cpath d=\\'M0 0h20v20H0V0zm1 1h18v18H1V1zm2 2h14v14H3V3z\\' fill=\\'%23ffffff\\' fill-opacity=\\'0.1\\' fill-rule=\\'evenodd\\'/%3E%3C/svg%3E')" }}></div>
+          <div className="relative z-10">
+            <h2 className="text-2xl font-bold text-text-dark mb-4">Overall Performance Snapshot</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="flex flex-col gap-1 p-5 bg-white/70 backdrop-blur-sm rounded-xl shadow-md border border-white/50">
+                <p className="text-base font-medium text-text-medium">Total Users</p>
+                <p className="text-text-dark tracking-tight text-4xl font-extrabold leading-tight">{kpiData.totalUsers.toLocaleString()}</p>
+                <p className="text-positive text-base font-semibold leading-normal flex items-center gap-1">
+                  <span className="material-symbols-outlined text-base !font-semibold">trending_up</span>+1.2%
+                </p>
+              </div>
+              <div className="flex flex-col gap-1 p-5 bg-white/70 backdrop-blur-sm rounded-xl shadow-md border border-white/50">
+                <p className="text-base font-medium text-text-medium">Signups Today</p>
+                <p className="text-text-dark tracking-tight text-4xl font-extrabold leading-tight">{kpiData.signupsToday.toLocaleString()}</p>
+                <p className="text-positive text-base font-semibold leading-normal flex items-center gap-1">
+                  <span className="material-symbols-outlined text-base !font-semibold">trending_up</span>+5%
+                </p>
+              </div>
+              <div className="flex flex-col gap-1 p-5 bg-white/70 backdrop-blur-sm rounded-xl shadow-md border border-white/50">
+                <p className="text-base font-medium text-text-medium">Active 30D</p>
+                <p className="text-text-dark tracking-tight text-4xl font-extrabold leading-tight">{kpiData.active30d.toLocaleString()}</p>
+                <p className="text-positive text-base font-semibold leading-normal flex items-center gap-1">
+                  <span className="material-symbols-outlined text-base !font-semibold">trending_up</span>+0.8%
+                </p>
+              </div>
+              <div className="flex flex-col gap-1 p-5 bg-white/70 backdrop-blur-sm rounded-xl shadow-md border border-white/50">
+                <p className="text-base font-medium text-text-medium">Active Premium</p>
+                <p className="text-text-dark tracking-tight text-4xl font-extrabold leading-tight">{kpiData.activePremium.toLocaleString()}</p>
+                <p className="text-negative text-base font-semibold leading-normal flex items-center gap-1">
+                  <span className="material-symbols-outlined text-base !font-semibold">trending_down</span>-0.2%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+          <div className="flex flex-col gap-2 rounded-xl p-6 border border-border-light bg-white shadow-sm">
+            <p className="text-text-medium text-base font-medium leading-normal">Total Matches</p>
+            <p className="text-text-dark tracking-tight text-3xl font-bold leading-tight">{kpiData.totalMatches.toLocaleString()}</p>
+            <p className="text-positive text-base font-semibold leading-normal">+3%</p>
+          </div>
+          <div className="flex flex-col gap-2 rounded-xl p-6 border border-border-light bg-white shadow-sm">
+            <p className="text-text-medium text-base font-medium leading-normal">Women:Men Ratio</p>
+            <p className="text-text-dark tracking-tight text-3xl font-bold leading-tight">1.2 : 1</p>
+            <p className="text-negative text-base font-semibold leading-normal">-0.1%</p>
+          </div>
+          <div className="flex flex-col gap-2 rounded-xl p-6 border border-border-light bg-white shadow-sm">
+            <p className="text-text-medium text-base font-medium leading-normal">Verification Queue</p>
+            <p className="text-text-dark tracking-tight text-3xl font-bold leading-tight">{kpiData.verificationQueue}</p>
+            <p className="text-positive text-base font-semibold leading-normal">+15%</p>
+          </div>
+          <div className="flex flex-col gap-2 rounded-xl p-6 border border-border-light bg-white shadow-sm">
+            <p className="text-text-medium text-base font-medium leading-normal">Deactivated Users</p>
+            <p className="text-text-dark tracking-tight text-3xl font-bold leading-tight">{kpiData.deactivatedUsers}</p>
+            <p className="text-negative text-base font-semibold leading-normal">-1%</p>
+          </div>
+        </div>
+
+        <section className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-10">
+          <div className="flex flex-col gap-4 rounded-2xl border border-border-light p-8 bg-white shadow-md col-span-1 xl:col-span-2">
+            <div className="flex justify-between items-center">
+              <h3 className="text-2xl font-bold text-text-dark">Daily Signups</h3>
+              <div className="flex gap-2 items-center">
+                <p className="text-text-medium text-lg font-normal leading-normal">Last 90 Days</p>
+                <p className="text-positive text-lg font-semibold leading-normal">+12.5%</p>
+              </div>
+            </div>
+            <p className="text-text-dark tracking-tight text-5xl font-extrabold leading-tight truncate">28,980</p>
+            <div className="flex min-h-[220px] flex-1 flex-col justify-end pt-4">
+              <svg fill="none" preserveAspectRatio="none" viewBox="-3 0 478 150" width="100%" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25V149H326.769H0V109Z" fill="url(#paint0_linear_chart_light)"></path>
+                <path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25" stroke="#77aaff" strokeLinecap="round" strokeWidth="3"></path>
+                <defs><linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_chart_light" x1="236" x2="236" y1="1" y2="149"><stop className="chart-gradient-blue"></stop><stop className="chart-gradient-blue-end" offset="1"></stop></linearGradient></defs>
+              </svg>
+            </div>
+          </div>
+          
+          <div className="flex flex-col gap-4 rounded-2xl border border-border-light p-8 bg-white shadow-md">
+            <div className="flex justify-between items-center">
+              <h3 className="text-2xl font-bold text-text-dark">DAU vs MAU</h3>
+              <div className="flex gap-2 items-center">
+                <p className="text-text-medium text-lg font-normal leading-normal">Last 90 Days</p>
+                <p className="text-negative text-lg font-semibold leading-normal">-1.5%</p>
+              </div>
+            </div>
+            <p className="text-text-dark tracking-tight text-5xl font-extrabold leading-tight truncate">450K / 980K</p>
+            <div className="flex min-h-[220px] flex-1 flex-col justify-end pt-4">
+              <svg fill="none" preserveAspectRatio="none" viewBox="-3 0 478 150" width="100%" xmlns="http://www.w3.org/2000/svg">
+                <path d="M0 45C18.1538 45 18.1538 101 36.3077 101C54.4615 101 54.4615 81 72.6154 81C90.7692 81 90.7692 121 108.923 121C127.077 121 127.077 61 145.231 61C163.385 61 163.385 109 181.538 109C199.692 109 199.692 1 217.846 1C236 1 236 21 254.154 21C272.308 21 272.308 93 290.462 93C308.615 93 308.615 25 326.769 25C344.923 25 344.923 129 363.077 129C381.231 129 381.231 149 399.385 149C417.538 149 417.538 41 435.692 41C453.846 41 453.846 33 472 33V149H0V45Z" fill="url(#paint0_linear_chart_light_2)"></path>
+                <path d="M0 45C18.1538 45 18.1538 101 36.3077 101C54.4615 101 54.4615 81 72.6154 81C90.7692 81 90.7692 121 108.923 121C127.077 121 127.077 61 145.231 61C163.385 61 163.385 109 181.538 109C199.692 109 199.692 1 217.846 1C236 1 236 21 254.154 21C272.308 21 272.308 93 290.462 93C308.615 93 308.615 25 326.769 25C344.923 25 344.923 129 363.077 129C381.231 129 381.231 149 399.385 149C417.538 149 417.538 41 435.692 41C453.846 41 453.846 33 472 33" stroke="#77aaff" strokeLinecap="round" strokeWidth="3"></path>
+                <defs><linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_chart_light_2" x1="236" x2="236" y1="1" y2="149"><stop className="chart-gradient-blue"></stop><stop className="chart-gradient-blue-end" offset="1"></stop></linearGradient></defs>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="flex flex-col rounded-2xl border border-border-light bg-white shadow-md overflow-hidden">
+            <div className="p-8">
+              <h3 className="text-2xl font-bold text-text-dark">Top 20 Most Active Users</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-base">
+                <thead className="text-xs text-text-medium uppercase bg-gray-50 border-b border-border-light">
+                  <tr>
+                    <th className="px-8 py-4 font-semibold" scope="col">User</th>
+                    <th className="px-8 py-4 font-semibold" scope="col">Last Active</th>
+                    <th className="px-8 py-4 font-semibold" scope="col">Matches</th>
+                    <th className="px-8 py-4 font-semibold" scope="col">Country</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {topUsers.slice(0, 5).map((user) => (
+                    <tr key={user.id} className="border-b border-border-light hover:bg-gray-50 transition-colors">
+                      <td className="px-8 py-5 font-medium text-text-dark">
+                        <Link href={`/users/${user.id}`} className="hover:text-muted-teal hover:underline">{user.name}</Link>
+                      </td>
+                      <td className="px-8 py-5 text-text-medium">2 min ago</td>
+                      <td className="px-8 py-5 text-text-medium">{user.activityScore}</td>
+                      <td className="px-8 py-5 text-text-medium">{user.location.split(',')[1] || 'IND'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <div className="flex flex-col rounded-2xl border border-border-light bg-white shadow-md overflow-hidden">
+            <div className="p-8">
+              <h3 className="text-2xl font-bold text-text-dark">New Users Waiting Verification</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-base">
+                <thead className="text-xs text-text-medium uppercase bg-gray-50 border-b border-border-light">
+                  <tr>
+                    <th className="px-8 py-4 font-semibold" scope="col">User</th>
+                    <th className="px-8 py-4 font-semibold" scope="col">Signup Date</th>
+                    <th className="px-8 py-4 font-semibold text-right" scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {verificationQueue.map((user) => (
+                    <tr key={user.id} className="border-b border-border-light hover:bg-gray-50 transition-colors">
+                      <td className="px-8 py-5 font-medium text-text-dark">
+                         <Link href={`/users/${user.id}`} className="hover:text-muted-teal hover:underline">{user.name}</Link>
+                      </td>
+                      <td className="px-8 py-5 text-text-medium">2023-10-27</td>
+                      <td className="px-8 py-5 text-right">
+                        <button className="bg-muted-teal/30 text-muted-teal text-text-dark font-semibold py-2 px-4 rounded-lg text-sm hover:bg-muted-teal/40 transition-colors">Verify</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   );

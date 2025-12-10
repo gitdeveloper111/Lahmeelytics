@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lahmee Founder Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'off-white': '#fdfaf6','soft-peach': '#ffe0d2','muted-teal': '#b2e2d8','text-dark': '#3a3a3a',
+                        'text-medium': '#737373',
+                        'text-light': '#a1a1a1',
+                        'border-light': '#e5e7eb','chart-blue': '#8dbcfc','chart-green': '#a4e8a4','chart-red': '#ffadad','positive': '#4CAF50','negative': '#F44336',},
+                    fontFamily: {
+                        display: "Inter"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.5rem",lg: "0.75rem",
+                        xl: "1rem",
+                        '2xl': "1.5rem",
+                        full: "9999px"
+                    }
+                }
+            }
+        };
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }main::-webkit-scrollbar {
+            width: 8px;
+        }
+        main::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        main::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 4px;
+        }
+        main::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }.chart-gradient-blue {
+            stop-color: #8dbcfc;
+            stop-opacity: 0.5;
+        }
+        .chart-gradient-blue-end {
+            stop-color: #8dbcfc;
+            stop-opacity: 0;
+        }
+        .chart-line-blue {
+            stroke: #6699ee;}
+    </style>
+</head>
+<body class="bg-off-white font-display text-text-dark antialiased">
+<div class="relative flex h-auto min-h-screen w-full">
+<aside class="flex-shrink-0 w-64 bg-white border-r border-border-light shadow-sm">
+<div class="flex h-full min-h-[700px] flex-col justify-between p-6">
+<div class="flex flex-col gap-6">
+<div class="flex items-center gap-3 p-2">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Lahmee company logo with an abstract heart shape" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD3Kjird3aBmk8C0PGDghs6tknyUp8mIDl5ZAeru2Iy4QxvIKwToHiRHFzGjE6ohQzp58i7O4b1RlaTZMiy38RPG079yUHhG6kwsLCVpQHPNbYEure4uoa_bPbWrr2tjxQeh1sePKfMgagBE5Gh6kMIBT3Uv7krPRG7y4lw_maLt9MnamIHzTNElEyEu4QiTKm78EpQoqoIBUYQ-F7s4tI7gYC068imyw--kFnrQ2HgLvOAjRNpk0Ge_rSpwodT_5MJFfuUYYj3g1c3");'></div>
+<div class="flex flex-col">
+<h1 class="text-text-dark text-lg font-bold leading-normal">Lahmee</h1>
+<p class="text-text-medium text-sm font-normal leading-normal">Growth Story</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2 mt-4">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-soft-peach/70 text-text-dark font-semibold shadow-sm" href="#">
+<span class="material-symbols-outlined text-soft-peach-darker">dashboard</span>
+<p class="text-sm">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-medium hover:bg-gray-50 transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<p class="text-sm font-medium">Users</p>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-medium hover:bg-gray-50 transition-colors" href="#">
+<span class="material-symbols-outlined">verified_user</span>
+<p class="text-sm font-medium">Verification</p>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-medium hover:bg-gray-50 transition-colors" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<p class="text-sm font-medium">Reports</p>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-medium hover:bg-gray-50 transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-medium">Settings</p>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-1 border-t border-border-light pt-4">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-medium hover:bg-gray-50 transition-colors" href="#">
+<span class="material-symbols-outlined">help</span>
+<p class="text-sm font-medium">Support</p>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-text-medium hover:bg-gray-50 transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<p class="text-sm font-medium">Logout</p>
+</a>
+</div>
+</div>
+</aside>
+<main class="flex-1 overflow-y-auto p-10">
+<div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
+<h1 class="text-5xl font-extrabold leading-tight tracking-[-0.04em] text-text-dark">Your Growth Story</h1>
+<div class="flex gap-3 flex-wrap">
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white px-4 py-2 text-text-medium border border-border-light shadow-sm hover:border-gray-300 transition-colors">
+<span class="material-symbols-outlined text-base">calendar_today</span>
+<p class="text-sm font-medium leading-normal">Last 90 Days</p>
+<span class="material-symbols-outlined text-base">arrow_drop_down</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white px-4 py-2 text-text-medium border border-border-light shadow-sm hover:border-gray-300 transition-colors">
+<span class="material-symbols-outlined text-base">public</span>
+<p class="text-sm font-medium leading-normal">All Countries</p>
+<span class="material-symbols-outlined text-base">arrow_drop_down</span>
+</button>
+</div>
+</div>
+<div class="bg-gradient-to-br from-soft-peach to-muted-teal p-10 rounded-2xl shadow-lg mb-10 relative overflow-hidden">
+<div class="absolute inset-0 bg-repeat opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'20\' height=\'20\' viewBox=\'0 0 20 20\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M0 0h20v20H0V0zm1 1h18v18H1V1zm2 2h14v14H3V3z\' fill=\'%23ffffff\' fill-opacity=\'0.1\' fill-rule=\'evenodd\'/%3E%3C/svg%3E');"></div>
+<div class="relative z-10">
+<h2 class="text-2xl font-bold text-text-dark mb-4">Overall Performance Snapshot</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="flex flex-col gap-1 p-5 bg-white/70 backdrop-blur-sm rounded-xl shadow-md border border-white/50">
+<p class="text-base font-medium text-text-medium">Total Users</p>
+<p class="text-text-dark tracking-tight text-4xl font-extrabold leading-tight">1,234,567</p>
+<p class="text-positive text-base font-semibold leading-normal flex items-center gap-1"><span class="material-symbols-outlined text-base !font-semibold">trending_up</span>+1.2%</p>
+</div>
+<div class="flex flex-col gap-1 p-5 bg-white/70 backdrop-blur-sm rounded-xl shadow-md border border-white/50">
+<p class="text-base font-medium text-text-medium">Signups Today</p>
+<p class="text-text-dark tracking-tight text-4xl font-extrabold leading-tight">1,205</p>
+<p class="text-positive text-base font-semibold leading-normal flex items-center gap-1"><span class="material-symbols-outlined text-base !font-semibold">trending_up</span>+5%</p>
+</div>
+<div class="flex flex-col gap-1 p-5 bg-white/70 backdrop-blur-sm rounded-xl shadow-md border border-white/50">
+<p class="text-base font-medium text-text-medium">Active 30D</p>
+<p class="text-text-dark tracking-tight text-4xl font-extrabold leading-tight">450,123</p>
+<p class="text-positive text-base font-semibold leading-normal flex items-center gap-1"><span class="material-symbols-outlined text-base !font-semibold">trending_up</span>+0.8%</p>
+</div>
+<div class="flex flex-col gap-1 p-5 bg-white/70 backdrop-blur-sm rounded-xl shadow-md border border-white/50">
+<p class="text-base font-medium text-text-medium">Active Premium</p>
+<p class="text-text-dark tracking-tight text-4xl font-extrabold leading-tight">32,876</p>
+<p class="text-negative text-base font-semibold leading-normal flex items-center gap-1"><span class="material-symbols-outlined text-base !font-semibold">trending_down</span>-0.2%</p>
+</div>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+<div class="flex flex-col gap-2 rounded-xl p-6 border border-border-light bg-white shadow-sm">
+<p class="text-text-medium text-base font-medium leading-normal">Total Matches</p>
+<p class="text-text-dark tracking-tight text-3xl font-bold leading-tight">89,453</p>
+<p class="text-positive text-base font-semibold leading-normal">+3%</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 border border-border-light bg-white shadow-sm">
+<p class="text-text-medium text-base font-medium leading-normal">Women:Men Ratio</p>
+<p class="text-text-dark tracking-tight text-3xl font-bold leading-tight">1.2 : 1</p>
+<p class="text-negative text-base font-semibold leading-normal">-0.1%</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 border border-border-light bg-white shadow-sm">
+<p class="text-text-medium text-base font-medium leading-normal">Verification Queue</p>
+<p class="text-text-dark tracking-tight text-3xl font-bold leading-tight">212</p>
+<p class="text-positive text-base font-semibold leading-normal">+15%</p>
+</div>
+<div class="flex flex-col gap-2 rounded-xl p-6 border border-border-light bg-white shadow-sm">
+<p class="text-text-medium text-base font-medium leading-normal">Deactivated Users</p>
+<p class="text-text-dark tracking-tight text-3xl font-bold leading-tight">58</p>
+<p class="text-negative text-base font-semibold leading-normal">-1%</p>
+</div>
+</div>
+<section class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-10">
+<div class="flex flex-col gap-4 rounded-2xl border border-border-light p-8 bg-white shadow-md col-span-1 xl:col-span-2">
+<div class="flex justify-between items-center">
+<h3 class="text-2xl font-bold text-text-dark">Daily Signups</h3>
+<div class="flex gap-2 items-center">
+<p class="text-text-medium text-lg font-normal leading-normal">Last 90 Days</p>
+<p class="text-positive text-lg font-semibold leading-normal">+12.5%</p>
+</div>
+</div>
+<p class="text-text-dark tracking-tight text-5xl font-extrabold leading-tight truncate">28,980</p>
+<div class="flex min-h-[220px] flex-1 flex-col justify-end pt-4">
+<svg fill="none" preserveAspectRatio="none" viewBox="-3 0 478 150" width="100%" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25V149H326.769H0V109Z" fill="url(#paint0_linear_chart_light)"></path>
+<path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25" stroke="#77aaff" stroke-linecap="round" stroke-width="3"></path>
+<defs><linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_chart_light" x1="236" x2="236" y1="1" y2="149"><stop class="chart-gradient-blue"></stop><stop class="chart-gradient-blue-end" offset="1"></stop></linearGradient></defs>
+</svg>
+</div>
+</div>
+<div class="flex flex-col gap-4 rounded-2xl border border-border-light p-8 bg-white shadow-md">
+<div class="flex justify-between items-center">
+<h3 class="text-2xl font-bold text-text-dark">DAU vs MAU</h3>
+<div class="flex gap-2 items-center">
+<p class="text-text-medium text-lg font-normal leading-normal">Last 90 Days</p>
+<p class="text-negative text-lg font-semibold leading-normal">-1.5%</p>
+</div>
+</div>
+<p class="text-text-dark tracking-tight text-5xl font-extrabold leading-tight truncate">450K / 980K</p>
+<div class="flex min-h-[220px] flex-1 flex-col justify-end pt-4">
+<svg fill="none" preserveAspectRatio="none" viewBox="-3 0 478 150" width="100%" xmlns="http://www.w3.org/2000/svg">
+<path d="M0 45C18.1538 45 18.1538 101 36.3077 101C54.4615 101 54.4615 81 72.6154 81C90.7692 81 90.7692 121 108.923 121C127.077 121 127.077 61 145.231 61C163.385 61 163.385 109 181.538 109C199.692 109 199.692 1 217.846 1C236 1 236 21 254.154 21C272.308 21 272.308 93 290.462 93C308.615 93 308.615 25 326.769 25C344.923 25 344.923 129 363.077 129C381.231 129 381.231 149 399.385 149C417.538 149 417.538 41 435.692 41C453.846 41 453.846 33 472 33V149H0V45Z" fill="url(#paint0_linear_chart_light_2)"></path>
+<path d="M0 45C18.1538 45 18.1538 101 36.3077 101C54.4615 101 54.4615 81 72.6154 81C90.7692 81 90.7692 121 108.923 121C127.077 121 127.077 61 145.231 61C163.385 61 163.385 109 181.538 109C199.692 109 199.692 1 217.846 1C236 1 236 21 254.154 21C272.308 21 272.308 93 290.462 93C308.615 93 308.615 25 326.769 25C344.923 25 344.923 129 363.077 129C381.231 129 381.231 149 399.385 149C417.538 149 417.538 41 435.692 41C453.846 41 453.846 33 472 33" stroke="#77aaff" stroke-linecap="round" stroke-width="3"></path>
+<defs><linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_chart_light_2" x1="236" x2="236" y1="1" y2="149"><stop class="chart-gradient-blue"></stop><stop class="chart-gradient-blue-end" offset="1"></stop></linearGradient></defs>
+</svg>
+</div>
+</div>
+<div class="flex flex-col gap-4 rounded-2xl border border-border-light p-8 bg-white shadow-md">
+<h3 class="text-2xl font-bold text-text-dark">Active Users by Country &amp; Gender</h3>
+<p class="text-text-medium text-lg font-normal leading-normal">Last 90 Days</p>
+<div class="grid min-h-[220px] grid-flow-col gap-4 grid-rows-[1fr_auto] items-end justify-items-center pt-4 px-3">
+<div class="w-full flex flex-col items-end gap-0.5"><div class="bg-muted-teal w-1/2 h-full rounded-t-lg shadow-sm"></div><div class="bg-muted-teal/50 w-1/2 h-full rounded-t-lg shadow-sm"></div></div><p class="text-text-medium text-[13px] font-semibold tracking-wide">USA</p>
+<div class="w-full flex flex-col items-end gap-0.5"><div class="bg-muted-teal w-1/2 h-[75%] rounded-t-lg shadow-sm"></div><div class="bg-muted-teal/50 w-1/2 h-[75%] rounded-t-lg shadow-sm"></div></div><p class="text-text-medium text-[13px] font-semibold tracking-wide">UK</p>
+<div class="w-full flex flex-col items-end gap-0.5"><div class="bg-muted-teal w-1/2 h-[60%] rounded-t-lg shadow-sm"></div><div class="bg-muted-teal/50 w-1/2 h-[60%] rounded-t-lg shadow-sm"></div></div><p class="text-text-medium text-[13px] font-semibold tracking-wide">CAN</p>
+<div class="w-full flex flex-col items-end gap-0.5"><div class="bg-muted-teal w-1/2 h-[50%] rounded-t-lg shadow-sm"></div><div class="bg-muted-teal/50 w-1/2 h-[50%] rounded-t-lg shadow-sm"></div></div><p class="text-text-medium text-[13px] font-semibold tracking-wide">AUS</p>
+<div class="w-full flex flex-col items-end gap-0.5"><div class="bg-muted-teal w-1/2 h-[35%] rounded-t-lg shadow-sm"></div><div class="bg-muted-teal/50 w-1/2 h-[35%] rounded-t-lg shadow-sm"></div></div><p class="text-text-medium text-[13px] font-semibold tracking-wide">IND</p>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<div class="flex flex-col rounded-2xl border border-border-light bg-white shadow-md overflow-hidden">
+<div class="p-8">
+<h3 class="text-2xl font-bold text-text-dark">Top 20 Most Active Users</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-base">
+<thead class="text-xs text-text-medium uppercase bg-gray-50 border-b border-border-light">
+<tr>
+<th class="px-8 py-4 font-semibold" scope="col">User</th>
+<th class="px-8 py-4 font-semibold" scope="col">Last Active</th>
+<th class="px-8 py-4 font-semibold" scope="col">Matches</th>
+<th class="px-8 py-4 font-semibold" scope="col">Country</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-border-light hover:bg-gray-50 transition-colors"><td class="px-8 py-5 font-medium text-text-dark">Olivia Chen</td><td class="px-8 py-5 text-text-medium">2 min ago</td><td class="px-8 py-5 text-text-medium">128</td><td class="px-8 py-5 text-text-medium">USA</td></tr>
+<tr class="border-b border-border-light hover:bg-gray-50 transition-colors"><td class="px-8 py-5 font-medium text-text-dark">Ben Carter</td><td class="px-8 py-5 text-text-medium">5 min ago</td><td class="px-8 py-5 text-text-medium">112</td><td class="px-8 py-5 text-text-medium">UK</td></tr>
+<tr class="border-b border-border-light hover:bg-gray-50 transition-colors"><td class="px-8 py-5 font-medium text-text-dark">Aarav Patel</td><td class="px-8 py-5 text-text-medium">15 min ago</td><td class="px-8 py-5 text-text-medium">105</td><td class="px-8 py-5 text-text-medium">IND</td></tr>
+<tr class="border-b border-border-light hover:bg-gray-50 transition-colors"><td class="px-8 py-5 font-medium text-text-dark">Sophia Rodriguez</td><td class="px-8 py-5 text-text-medium">22 min ago</td><td class="px-8 py-5 text-text-medium">98</td><td class="px-8 py-5 text-text-medium">CAN</td></tr>
+<tr class="hover:bg-gray-50 transition-colors"><td class="px-8 py-5 font-medium text-text-dark">Liam Goldstein</td><td class="px-8 py-5 text-text-medium">30 min ago</td><td class="px-8 py-5 text-text-medium">95</td><td class="px-8 py-5 text-text-medium">AUS</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="flex flex-col rounded-2xl border border-border-light bg-white shadow-md overflow-hidden">
+<div class="p-8">
+<h3 class="text-2xl font-bold text-text-dark">New Users Waiting Verification</h3>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-base">
+<thead class="text-xs text-text-medium uppercase bg-gray-50 border-b border-border-light">
+<tr>
+<th class="px-8 py-4 font-semibold" scope="col">User</th>
+<th class="px-8 py-4 font-semibold" scope="col">Signup Date</th>
+<th class="px-8 py-4 font-semibold text-right" scope="col">Action</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-border-light hover:bg-gray-50 transition-colors"><td class="px-8 py-5 font-medium text-text-dark">Fatima Al-Jamil</td><td class="px-8 py-5 text-text-medium">2023-10-27</td><td class="px-8 py-5 text-right"><button class="bg-muted-teal/30 text-muted-teal text-text-dark font-semibold py-2 px-4 rounded-lg text-sm hover:bg-muted-teal/40 transition-colors">Verify</button></td></tr>
+<tr class="border-b border-border-light hover:bg-gray-50 transition-colors"><td class="px-8 py-5 font-medium text-text-dark">Kenji Tanaka</td><td class="px-8 py-5 text-text-medium">2023-10-27</td><td class="px-8 py-5 text-right"><button class="bg-muted-teal/30 text-muted-teal text-text-dark font-semibold py-2 px-4 rounded-lg text-sm hover:bg-muted-teal/40 transition-colors">Verify</button></td></tr>
+<tr class="border-b border-border-light hover:bg-gray-50 transition-colors"><td class="px-8 py-5 font-medium text-text-dark">Isabella Rossi</td><td class="px-8 py-5 text-text-medium">2023-10-26</td><td class="px-8 py-5 text-right"><button class="bg-muted-teal/30 text-muted-teal text-text-dark font-semibold py-2 px-4 rounded-lg text-sm hover:bg-muted-teal/40 transition-colors">Verify</button></td></tr>
+<tr class="border-b border-border-light hover:bg-gray-50 transition-colors"><td class="px-8 py-5 font-medium text-text-dark">David Miller</td><td class="px-8 py-5 text-text-medium">2023-10-26</td><td class="px-8 py-5 text-right"><button class="bg-muted-teal/30 text-muted-teal text-text-dark font-semibold py-2 px-4 rounded-lg text-sm hover:bg-muted-teal/40 transition-colors">Verify</button></td></tr>
+<tr class="hover:bg-gray-50 transition-colors"><td class="px-8 py-5 font-medium text-text-dark">Chloé Dubois</td><td class="px-8 py-5 text-text-medium">2023-10-25</td><td class="px-8 py-5 text-right"><button class="bg-muted-teal/30 text-muted-teal text-text-dark font-semibold py-2 px-4 rounded-lg text-sm hover:bg-muted-teal/40 transition-colors">Verify</button></td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+</body></html>
