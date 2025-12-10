@@ -1,8 +1,74 @@
 import { Sidebar } from "@/components/layout/Sidebar";
-import { kpiData, topUsers, verificationQueue } from "@/lib/mockData";
 import { Link } from "wouter";
+import { useQuery } from "@tanstack/react-query";
+import { fetchKPIs, fetchTopUsers, fetchVerificationQueue, fetchSignupsTrend, fetchEngagement, fetchCountries } from "@/lib/api";
+import { useState } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+
+function formatNumber(num: number): string {
+  if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+  if (num >= 1000) return (num / 1000).toFixed(0) + 'K';
+  return num.toLocaleString();
+}
+
+function formatDate(dateStr: string): string {
+  if (!dateStr) return 'N/A';
+  const date = new Date(dateStr);
+  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+}
+
+function timeAgo(dateStr: string): string {
+  if (!dateStr) return 'N/A';
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+  
+  if (diffMins < 1) return 'Just now';
+  if (diffMins < 60) return `${diffMins} min ago`;
+  if (diffHours < 24) return `${diffHours} hr ago`;
+  if (diffDays < 7) return `${diffDays} days ago`;
+  return formatDate(dateStr);
+}
 
 export default function Dashboard() {
+  const [selectedCountry, setSelectedCountry] = useState('all');
+
+  const { data: kpis, isLoading: kpisLoading } = useQuery({
+    queryKey: ['kpis', selectedCountry],
+    queryFn: () => fetchKPIs(selectedCountry),
+  });
+
+  const { data: topUsers, isLoading: topUsersLoading } = useQuery({
+    queryKey: ['topUsers'],
+    queryFn: fetchTopUsers,
+  });
+
+  const { data: verificationQueue, isLoading: verificationLoading } = useQuery({
+    queryKey: ['verificationQueue'],
+    queryFn: fetchVerificationQueue,
+  });
+
+  const { data: signupsTrend } = useQuery({
+    queryKey: ['signupsTrend'],
+    queryFn: fetchSignupsTrend,
+  });
+
+  const { data: engagement } = useQuery({
+    queryKey: ['engagement'],
+    queryFn: fetchEngagement,
+  });
+
+  const { data: countries } = useQuery({
+    queryKey: ['countries'],
+    queryFn: fetchCountries,
+  });
+
+  // Calculate totals for signups
+  const totalSignups90d = signupsTrend?.reduce((acc: number, d: any) => acc + d.count, 0) || 0;
+
   return (
     <div className="relative flex h-auto min-h-screen w-full bg-off-white font-sans text-text-dark antialiased">
       <Sidebar />
@@ -16,11 +82,20 @@ export default function Dashboard() {
               <p className="text-sm font-medium leading-normal">Last 90 Days</p>
               <span className="material-symbols-outlined text-base">arrow_drop_down</span>
             </button>
-            <button className="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white px-4 py-2 text-text-medium border border-border-light shadow-sm hover:border-gray-300 transition-colors">
-              <span className="material-symbols-outlined text-base">public</span>
-              <p className="text-sm font-medium leading-normal">All Countries</p>
-              <span className="material-symbols-outlined text-base">arrow_drop_down</span>
-            </button>
+            <div className="relative">
+              <select 
+                value={selectedCountry}
+                onChange={(e) => setSelectedCountry(e.target.value)}
+                className="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white pl-10 pr-8 py-2 text-text-medium border border-border-light shadow-sm hover:border-gray-300 transition-colors text-sm font-medium appearance-none cursor-pointer"
+              >
+                <option value="all">All Countries</option>
+                {countries?.map((c: any) => (
+                  <option key={c.country} value={c.country}>{c.country} ({c.userCount})</option>
+                ))}
+              </select>
+              <span className="material-symbols-outlined text-base absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">public</span>
+              <span className="material-symbols-outlined text-base absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">arrow_drop_down</span>
+            </div>
           </div>
         </div>
 
@@ -31,28 +106,44 @@ export default function Dashboard() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               <div className="flex flex-col gap-1 p-5 bg-white/70 backdrop-blur-sm rounded-xl shadow-md border border-white/50">
                 <p className="text-base font-medium text-text-medium">Total Users</p>
-                <p className="text-text-dark tracking-tight text-4xl font-extrabold leading-tight">{kpiData.totalUsers.toLocaleString()}</p>
+                {kpisLoading ? (
+                  <Skeleton className="h-10 w-32" />
+                ) : (
+                  <p className="text-text-dark tracking-tight text-4xl font-extrabold leading-tight">{formatNumber(kpis?.totalUsers || 0)}</p>
+                )}
                 <p className="text-positive text-base font-semibold leading-normal flex items-center gap-1">
                   <span className="material-symbols-outlined text-base !font-semibold">trending_up</span>+1.2%
                 </p>
               </div>
               <div className="flex flex-col gap-1 p-5 bg-white/70 backdrop-blur-sm rounded-xl shadow-md border border-white/50">
                 <p className="text-base font-medium text-text-medium">Signups Today</p>
-                <p className="text-text-dark tracking-tight text-4xl font-extrabold leading-tight">{kpiData.signupsToday.toLocaleString()}</p>
+                {kpisLoading ? (
+                  <Skeleton className="h-10 w-24" />
+                ) : (
+                  <p className="text-text-dark tracking-tight text-4xl font-extrabold leading-tight">{formatNumber(kpis?.signupsToday || 0)}</p>
+                )}
                 <p className="text-positive text-base font-semibold leading-normal flex items-center gap-1">
                   <span className="material-symbols-outlined text-base !font-semibold">trending_up</span>+5%
                 </p>
               </div>
               <div className="flex flex-col gap-1 p-5 bg-white/70 backdrop-blur-sm rounded-xl shadow-md border border-white/50">
                 <p className="text-base font-medium text-text-medium">Active 30D</p>
-                <p className="text-text-dark tracking-tight text-4xl font-extrabold leading-tight">{kpiData.active30d.toLocaleString()}</p>
+                {kpisLoading ? (
+                  <Skeleton className="h-10 w-28" />
+                ) : (
+                  <p className="text-text-dark tracking-tight text-4xl font-extrabold leading-tight">{formatNumber(kpis?.active30d || 0)}</p>
+                )}
                 <p className="text-positive text-base font-semibold leading-normal flex items-center gap-1">
                   <span className="material-symbols-outlined text-base !font-semibold">trending_up</span>+0.8%
                 </p>
               </div>
               <div className="flex flex-col gap-1 p-5 bg-white/70 backdrop-blur-sm rounded-xl shadow-md border border-white/50">
                 <p className="text-base font-medium text-text-medium">Active Premium</p>
-                <p className="text-text-dark tracking-tight text-4xl font-extrabold leading-tight">{kpiData.activePremium.toLocaleString()}</p>
+                {kpisLoading ? (
+                  <Skeleton className="h-10 w-20" />
+                ) : (
+                  <p className="text-text-dark tracking-tight text-4xl font-extrabold leading-tight">{formatNumber(kpis?.activePremium || 0)}</p>
+                )}
                 <p className="text-negative text-base font-semibold leading-normal flex items-center gap-1">
                   <span className="material-symbols-outlined text-base !font-semibold">trending_down</span>-0.2%
                 </p>
@@ -64,23 +155,41 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
           <div className="flex flex-col gap-2 rounded-xl p-6 border border-border-light bg-white shadow-sm">
             <p className="text-text-medium text-base font-medium leading-normal">Total Matches</p>
-            <p className="text-text-dark tracking-tight text-3xl font-bold leading-tight">{kpiData.totalMatches.toLocaleString()}</p>
+            {kpisLoading ? (
+              <Skeleton className="h-8 w-24" />
+            ) : (
+              <p className="text-text-dark tracking-tight text-3xl font-bold leading-tight">{formatNumber(kpis?.totalMatches || 0)}</p>
+            )}
             <p className="text-positive text-base font-semibold leading-normal">+3%</p>
           </div>
           <div className="flex flex-col gap-2 rounded-xl p-6 border border-border-light bg-white shadow-sm">
             <p className="text-text-medium text-base font-medium leading-normal">Women:Men Ratio</p>
-            <p className="text-text-dark tracking-tight text-3xl font-bold leading-tight">1.2 : 1</p>
-            <p className="text-negative text-base font-semibold leading-normal">-0.1%</p>
+            {kpisLoading ? (
+              <Skeleton className="h-8 w-20" />
+            ) : (
+              <p className="text-text-dark tracking-tight text-3xl font-bold leading-tight">{kpis?.womenMenRatio || '1 : 1'}</p>
+            )}
+            <p className="text-text-medium text-sm leading-normal">
+              {formatNumber(kpis?.womenCount || 0)} W / {formatNumber(kpis?.menCount || 0)} M
+            </p>
           </div>
           <div className="flex flex-col gap-2 rounded-xl p-6 border border-border-light bg-white shadow-sm">
             <p className="text-text-medium text-base font-medium leading-normal">Verification Queue</p>
-            <p className="text-text-dark tracking-tight text-3xl font-bold leading-tight">{kpiData.verificationQueue}</p>
-            <p className="text-positive text-base font-semibold leading-normal">+15%</p>
+            {kpisLoading ? (
+              <Skeleton className="h-8 w-16" />
+            ) : (
+              <p className="text-text-dark tracking-tight text-3xl font-bold leading-tight">{kpis?.verificationQueue || 0}</p>
+            )}
+            <p className="text-positive text-base font-semibold leading-normal">Pending</p>
           </div>
           <div className="flex flex-col gap-2 rounded-xl p-6 border border-border-light bg-white shadow-sm">
             <p className="text-text-medium text-base font-medium leading-normal">Deactivated Users</p>
-            <p className="text-text-dark tracking-tight text-3xl font-bold leading-tight">{kpiData.deactivatedUsers}</p>
-            <p className="text-negative text-base font-semibold leading-normal">-1%</p>
+            {kpisLoading ? (
+              <Skeleton className="h-8 w-16" />
+            ) : (
+              <p className="text-text-dark tracking-tight text-3xl font-bold leading-tight">{kpis?.deactivatedUsers || 0}</p>
+            )}
+            <p className="text-negative text-base font-semibold leading-normal">Inactive</p>
           </div>
         </div>
 
@@ -93,7 +202,7 @@ export default function Dashboard() {
                 <p className="text-positive text-lg font-semibold leading-normal">+12.5%</p>
               </div>
             </div>
-            <p className="text-text-dark tracking-tight text-5xl font-extrabold leading-tight truncate">28,980</p>
+            <p className="text-text-dark tracking-tight text-5xl font-extrabold leading-tight truncate">{formatNumber(totalSignups90d)}</p>
             <div className="flex min-h-[220px] flex-1 flex-col justify-end pt-4">
               <svg fill="none" preserveAspectRatio="none" viewBox="-3 0 478 150" width="100%" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25V149H326.769H0V109Z" fill="url(#paint0_linear_chart_light)"></path>
@@ -108,10 +217,11 @@ export default function Dashboard() {
               <h3 className="text-2xl font-bold text-text-dark">DAU vs MAU</h3>
               <div className="flex gap-2 items-center">
                 <p className="text-text-medium text-lg font-normal leading-normal">Last 90 Days</p>
-                <p className="text-negative text-lg font-semibold leading-normal">-1.5%</p>
               </div>
             </div>
-            <p className="text-text-dark tracking-tight text-5xl font-extrabold leading-tight truncate">450K / 980K</p>
+            <p className="text-text-dark tracking-tight text-5xl font-extrabold leading-tight truncate">
+              {engagement?.dau?.length > 0 ? formatNumber(engagement.dau[engagement.dau.length - 1]?.count || 0) : '0'} / {formatNumber(engagement?.mau || 0)}
+            </p>
             <div className="flex min-h-[220px] flex-1 flex-col justify-end pt-4">
               <svg fill="none" preserveAspectRatio="none" viewBox="-3 0 478 150" width="100%" xmlns="http://www.w3.org/2000/svg">
                 <path d="M0 45C18.1538 45 18.1538 101 36.3077 101C54.4615 101 54.4615 81 72.6154 81C90.7692 81 90.7692 121 108.923 121C127.077 121 127.077 61 145.231 61C163.385 61 163.385 109 181.538 109C199.692 109 199.692 1 217.846 1C236 1 236 21 254.154 21C272.308 21 272.308 93 290.462 93C308.615 93 308.615 25 326.769 25C344.923 25 344.923 129 363.077 129C381.231 129 381.231 149 399.385 149C417.538 149 417.538 41 435.692 41C453.846 41 453.846 33 472 33V149H0V45Z" fill="url(#paint0_linear_chart_light_2)"></path>
@@ -133,21 +243,39 @@ export default function Dashboard() {
                   <tr>
                     <th className="px-8 py-4 font-semibold" scope="col">User</th>
                     <th className="px-8 py-4 font-semibold" scope="col">Last Active</th>
-                    <th className="px-8 py-4 font-semibold" scope="col">Matches</th>
+                    <th className="px-8 py-4 font-semibold" scope="col">Gender</th>
                     <th className="px-8 py-4 font-semibold" scope="col">Country</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {topUsers.slice(0, 5).map((user) => (
-                    <tr key={user.id} className="border-b border-border-light hover:bg-gray-50 transition-colors">
-                      <td className="px-8 py-5 font-medium text-text-dark">
-                        <Link href={`/users/${user.id}`} className="hover:text-muted-teal hover:underline">{user.name}</Link>
-                      </td>
-                      <td className="px-8 py-5 text-text-medium">2 min ago</td>
-                      <td className="px-8 py-5 text-text-medium">{user.activityScore}</td>
-                      <td className="px-8 py-5 text-text-medium">{user.location.split(',')[1] || 'IND'}</td>
+                  {topUsersLoading ? (
+                    Array.from({ length: 5 }).map((_, i) => (
+                      <tr key={i} className="border-b border-border-light">
+                        <td className="px-8 py-5"><Skeleton className="h-4 w-32" /></td>
+                        <td className="px-8 py-5"><Skeleton className="h-4 w-20" /></td>
+                        <td className="px-8 py-5"><Skeleton className="h-4 w-16" /></td>
+                        <td className="px-8 py-5"><Skeleton className="h-4 w-12" /></td>
+                      </tr>
+                    ))
+                  ) : topUsers?.length > 0 ? (
+                    topUsers.slice(0, 5).map((user: any) => (
+                      <tr key={user.id} className="border-b border-border-light hover:bg-gray-50 transition-colors">
+                        <td className="px-8 py-5 font-medium text-text-dark">
+                          <Link href={`/users/${user.id}`} className="hover:text-muted-teal hover:underline">
+                            {user.first_name} {user.last_name}
+                          </Link>
+                          {user.code_name && <span className="text-text-light text-xs ml-2">({user.code_name})</span>}
+                        </td>
+                        <td className="px-8 py-5 text-text-medium">{timeAgo(user.last_online)}</td>
+                        <td className="px-8 py-5 text-text-medium capitalize">{user.gender || 'N/A'}</td>
+                        <td className="px-8 py-5 text-text-medium">{user.country || 'N/A'}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={4} className="px-8 py-5 text-center text-text-medium">No users found</td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>
@@ -167,17 +295,35 @@ export default function Dashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {verificationQueue.map((user) => (
-                    <tr key={user.id} className="border-b border-border-light hover:bg-gray-50 transition-colors">
-                      <td className="px-8 py-5 font-medium text-text-dark">
-                         <Link href={`/users/${user.id}`} className="hover:text-muted-teal hover:underline">{user.name}</Link>
-                      </td>
-                      <td className="px-8 py-5 text-text-medium">2023-10-27</td>
-                      <td className="px-8 py-5 text-right">
-                        <button className="bg-muted-teal/30 text-muted-teal text-text-dark font-semibold py-2 px-4 rounded-lg text-sm hover:bg-muted-teal/40 transition-colors">Verify</button>
-                      </td>
+                  {verificationLoading ? (
+                    Array.from({ length: 5 }).map((_, i) => (
+                      <tr key={i} className="border-b border-border-light">
+                        <td className="px-8 py-5"><Skeleton className="h-4 w-32" /></td>
+                        <td className="px-8 py-5"><Skeleton className="h-4 w-24" /></td>
+                        <td className="px-8 py-5 text-right"><Skeleton className="h-8 w-16 ml-auto" /></td>
+                      </tr>
+                    ))
+                  ) : verificationQueue?.length > 0 ? (
+                    verificationQueue.slice(0, 5).map((user: any) => (
+                      <tr key={user.id} className="border-b border-border-light hover:bg-gray-50 transition-colors">
+                        <td className="px-8 py-5 font-medium text-text-dark">
+                          <Link href={`/users/${user.id}`} className="hover:text-muted-teal hover:underline">
+                            {user.first_name} {user.last_name}
+                          </Link>
+                        </td>
+                        <td className="px-8 py-5 text-text-medium">{formatDate(user.created_at)}</td>
+                        <td className="px-8 py-5 text-right">
+                          <button className="bg-muted-teal/30 text-text-dark font-semibold py-2 px-4 rounded-lg text-sm hover:bg-muted-teal/40 transition-colors">
+                            Verify
+                          </button>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={3} className="px-8 py-5 text-center text-text-medium">No pending verifications</td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>
