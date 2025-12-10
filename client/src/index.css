@@ -51,30 +51,36 @@
   --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
   --color-sidebar-border: hsl(var(--sidebar-border));
   --color-sidebar-ring: hsl(var(--sidebar-ring));
+  
+  --color-brand-blue: hsl(210 100% 45%);
+  --color-brand-teal: hsl(170 70% 40%);
+  --color-brand-yellow: hsl(45 90% 55%);
+  --color-brand-red: hsl(350 80% 60%);
+  --color-brand-navy: hsl(220 60% 20%);
 }
 
 :root {
-  /* Elegant, clean SaaS theme with Rose accent for Matrimonial context */
-  --background: 210 20% 98%; /* Very light cool gray */
-  --foreground: 222 47% 11%; /* Deep navy/black */
+  /* Clean, Clinical/Trustworthy SaaS Theme */
+  --background: 210 25% 96%; /* Cool Light Gray/Blueish */
+  --foreground: 215 25% 27%; /* Soft Dark Blue-Gray */
 
   --card: 0 0% 100%;
-  --card-foreground: 222 47% 11%;
+  --card-foreground: 215 25% 27%;
 
   --popover: 0 0% 100%;
-  --popover-foreground: 222 47% 11%;
+  --popover-foreground: 215 25% 27%;
 
-  /* Rose/Pink Primary for "Lahmee" */
-  --primary: 340 82% 52%; 
-  --primary-foreground: 355 100% 97%;
+  /* Primary Blue - Trust & Stability */
+  --primary: 210 100% 45%; 
+  --primary-foreground: 0 0% 100%;
 
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222 47% 11.2%;
+  --secondary: 170 70% 40%; /* Teal Accent */
+  --secondary-foreground: 0 0% 100%;
 
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
+  --muted: 210 20% 96%;
+  --muted-foreground: 215 16% 47%;
 
-  --accent: 210 40% 96.1%;
+  --accent: 210 20% 96%;
   --accent-foreground: 222 47% 11.2%;
 
   --destructive: 0 84.2% 60.2%;
@@ -82,27 +88,27 @@
 
   --border: 214.3 31.8% 91.4%;
   --input: 214.3 31.8% 91.4%;
-  --ring: 340 82% 52%;
+  --ring: 210 100% 45%;
 
-  --radius: 0.75rem;
+  --radius: 0.5rem;
 
-  /* Chart colors - Distinct & Professional */
-  --chart-1: 340 82% 52%; /* Primary Rose */
-  --chart-2: 262 83% 58%; /* Purple */
-  --chart-3: 199 89% 48%; /* Blue */
-  --chart-4: 32 95% 44%; /* Orange */
-  --chart-5: 142 71% 45%; /* Green */
+  /* Chart colors */
+  --chart-1: 210 100% 45%; /* Blue */
+  --chart-2: 170 70% 40%; /* Teal */
+  --chart-3: 45 90% 55%; /* Yellow/Gold */
+  --chart-4: 220 60% 20%; /* Navy */
+  --chart-5: 350 80% 60%; /* Red/Rose */
 
   --sidebar: 0 0% 100%;
-  --sidebar-foreground: 240 5.3% 26.1%;
-  --sidebar-primary: 240 5.9% 10%;
+  --sidebar-foreground: 215 25% 27%;
+  --sidebar-primary: 210 100% 45%;
   --sidebar-primary-foreground: 0 0% 98%;
-  --sidebar-accent: 240 4.8% 95.9%;
-  --sidebar-accent-foreground: 240 5.9% 10%;
+  --sidebar-accent: 210 20% 96%;
+  --sidebar-accent-foreground: 210 100% 45%;
   --sidebar-border: 220 13% 91%;
-  --sidebar-ring: 217.2 91.2% 59.8%;
+  --sidebar-ring: 210 100% 45%;
   
-  --font-sans: 'Inter', sans-serif;
+  --font-sans: 'Plus Jakarta Sans', 'Inter', sans-serif;
 }
 
 .dark {
@@ -115,10 +121,10 @@
   --popover: 222.2 84% 4.9%;
   --popover-foreground: 210 40% 98%;
 
-  --primary: 340 82% 60%;
+  --primary: 210 100% 60%;
   --primary-foreground: 222.2 47.4% 11.2%;
 
-  --secondary: 217.2 32.6% 17.5%;
+  --secondary: 170 70% 50%;
   --secondary-foreground: 210 40% 98%;
 
   --muted: 217.2 32.6% 17.5%;
@@ -132,13 +138,13 @@
 
   --border: 217.2 32.6% 17.5%;
   --input: 217.2 32.6% 17.5%;
-  --ring: 340 82% 60%;
+  --ring: 210 100% 60%;
   
-  --chart-1: 340 82% 60%;
-  --chart-2: 262 83% 65%;
-  --chart-3: 199 89% 55%;
-  --chart-4: 32 95% 50%;
-  --chart-5: 142 71% 50%;
+  --chart-1: 210 100% 60%;
+  --chart-2: 170 70% 50%;
+  --chart-3: 45 90% 65%;
+  --chart-4: 220 60% 40%;
+  --chart-5: 350 80% 70%;
 
   --sidebar: 240 5.9% 10%;
   --sidebar-foreground: 240 4.8% 95.9%;
@@ -147,7 +153,7 @@
   --sidebar-accent: 240 3.7% 15.9%;
   --sidebar-accent-foreground: 240 4.8% 95.9%;
   --sidebar-border: 240 3.7% 15.9%;
-  --sidebar-ring: 217.2 91.2% 59.8%;
+  --sidebar-ring: 210 100% 60%;
 }
 
 @layer base {

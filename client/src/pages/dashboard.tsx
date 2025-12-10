@@ -13,7 +13,10 @@ import {
   UserX,
   Calendar as CalendarIcon,
   Globe,
-  Download
+  Download,
+  ArrowRight,
+  TrendingUp,
+  UserCheck
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,39 +30,33 @@ import {
   TableRow 
 } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Link } from "wouter";
 
 export default function Dashboard() {
   return (
     <div className="min-h-screen bg-background flex">
       <Sidebar />
       
-      <main className="flex-1 overflow-y-auto h-screen">
+      <main className="flex-1 overflow-y-auto h-screen bg-slate-50/50">
         <div className="container mx-auto p-4 md:p-8 space-y-8">
           
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
-              <h2 className="text-3xl font-bold tracking-tight">Founder Dashboard</h2>
-              <p className="text-muted-foreground">Overview of key metrics and user growth.</p>
+              <h2 className="text-3xl font-bold tracking-tight text-foreground">Lahmee Founder Dashboard</h2>
+              <p className="text-muted-foreground mt-1">Overview of key metrics and platform growth.</p>
             </div>
             
             <div className="flex items-center gap-2">
-              <Select defaultValue="30d">
-                <SelectTrigger className="w-[140px] bg-background">
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  <SelectValue placeholder="Date Range" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="7d">Last 7 days</SelectItem>
-                  <SelectItem value="30d">Last 30 days</SelectItem>
-                  <SelectItem value="90d">Last 90 days</SelectItem>
-                  <SelectItem value="ytd">Year to Date</SelectItem>
-                </SelectContent>
-              </Select>
+              <div className="flex items-center bg-white rounded-md border shadow-sm p-1">
+                <Button variant="ghost" size="sm" className="h-8 rounded-sm text-xs font-medium">Last 7 Days</Button>
+                <Button variant="secondary" size="sm" className="h-8 rounded-sm text-xs font-medium bg-slate-100 text-slate-900">Last 30 Days</Button>
+                <Button variant="ghost" size="sm" className="h-8 rounded-sm text-xs font-medium">Last 90 Days</Button>
+              </div>
               
               <Select defaultValue="all">
-                <SelectTrigger className="w-[140px] bg-background">
-                  <Globe className="mr-2 h-4 w-4" />
+                <SelectTrigger className="w-[140px] bg-white border-slate-200">
+                  <Globe className="mr-2 h-4 w-4 text-muted-foreground" />
                   <SelectValue placeholder="Country" />
                 </SelectTrigger>
                 <SelectContent>
@@ -67,118 +64,136 @@ export default function Dashboard() {
                   <SelectItem value="in">India</SelectItem>
                   <SelectItem value="us">USA</SelectItem>
                   <SelectItem value="uk">UK</SelectItem>
-                  <SelectItem value="ca">Canada</SelectItem>
                 </SelectContent>
               </Select>
-              
-              <Button variant="outline" size="icon">
-                <Download className="h-4 w-4" />
-              </Button>
             </div>
           </div>
 
-          {/* KPI Cards Row 1 */}
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+          {/* KPI Cards Row 1 - High Level */}
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
             <StatCard 
               title="Total Users" 
               value={kpiData.totalUsers.toLocaleString()} 
-              icon={Users}
-              trend={{ value: 12, label: "vs last month" }}
+              icon={TrendingUp}
+              trend={{ value: 12 }}
+              borderColor="blue"
             />
             <StatCard 
               title="Signups Today" 
               value={kpiData.signupsToday} 
               icon={UserPlus}
-              description="Daily average: 130"
+              trend={{ value: 8 }}
+              borderColor="yellow"
             />
             <StatCard 
               title="Active 30D" 
               value={kpiData.active30d.toLocaleString()} 
               icon={Activity}
-              trend={{ value: 5, label: "vs last month" }}
+              trend={{ value: 5 }}
+              borderColor="teal"
             />
             <StatCard 
               title="Active Premium" 
               value={kpiData.activePremium.toLocaleString()} 
               icon={Crown}
-              trend={{ value: 8, label: "conversion rate" }}
+              trend={{ value: 8 }}
+              borderColor="navy"
             />
             <StatCard 
               title="Total Matches" 
               value={kpiData.totalMatches.toLocaleString()} 
               icon={HeartHandshake}
-              description="3.6 matches per user"
+              description="3.1M All time"
+              borderColor="red"
             />
           </div>
 
-          {/* KPI Cards Row 2 - Operational */}
-          <div className="grid gap-4 md:grid-cols-3">
+          {/* KPI Cards Row 2 - Operational Ratios */}
+          <div className="grid gap-6 md:grid-cols-4">
             <StatCard 
               title="Women : Men Ratio" 
-              value={kpiData.womenMenRatio} 
+              value="1.2 : 1" 
               icon={Scale}
-              description="Targeting 45:55"
-              className="bg-primary/5 border-primary/20"
+              borderColor="blue"
+              className="bg-blue-50/50"
             />
             <StatCard 
               title="Verification Queue" 
-              value={kpiData.verificationQueue} 
+              value={kpiData.verificationQueue.toLocaleString()} 
               icon={ClipboardCheck}
-              description="Avg wait: 4 hours"
-              className={kpiData.verificationQueue > 50 ? "border-amber-500/50 bg-amber-500/5" : ""}
+              borderColor="default"
+              className="bg-white"
+            />
+             <StatCard 
+              title="Verified Users" 
+              value="89,000" 
+              icon={UserCheck}
+              borderColor="navy"
+              className="bg-white"
             />
             <StatCard 
               title="Deactivated Users" 
               value={kpiData.deactivatedUsers} 
               icon={UserX}
-              description="1.2% churn rate"
+              borderColor="red"
+              className="bg-red-50/50"
             />
           </div>
 
           {/* Charts Row */}
-          <div className="grid gap-4 md:grid-cols-2">
-            <DailySignupsChart data={signupsData} title="Daily Signups (30 Days)" />
-            <UserEngagementChart data={activeUserEngagementData} title="DAU vs MAU (90 Days)" />
+          <div className="grid gap-6 md:grid-cols-2">
+            <DailySignupsChart data={signupsData} title="Daily Signups (30-90 days)" />
+            <UserEngagementChart data={activeUserEngagementData} title="DAU vs MAU (last 90 days)" />
           </div>
 
-          <div className="grid gap-4 md:grid-cols-7">
+          <div className="grid gap-6 md:grid-cols-7">
             {/* Bar Chart */}
             <div className="col-span-3">
                <CountryGenderChart data={countryDistribution} title="Active Users by Country & Gender" />
             </div>
 
             {/* Top Users Table */}
-            <Card className="col-span-4">
-              <CardHeader>
-                <CardTitle>Top 20 Most Active Users</CardTitle>
+            <Card className="col-span-4 border-none shadow-sm">
+              <CardHeader className="flex flex-row items-center justify-between pb-2 bg-slate-50/50 border-b border-slate-100 rounded-t-xl">
+                <CardTitle className="text-base font-semibold text-slate-800">Top 20 Most Active Users</CardTitle>
+                <Button variant="ghost" size="sm" className="text-xs text-brand-blue hover:text-brand-blue/80">View All</Button>
               </CardHeader>
-              <CardContent>
-                <div className="overflow-auto h-[300px]">
+              <CardContent className="p-0">
+                <div className="overflow-auto h-[320px]">
                   <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>User</TableHead>
-                        <TableHead>Location</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead className="text-right">Activity Score</TableHead>
+                    <TableHeader className="bg-slate-50 sticky top-0 z-10">
+                      <TableRow className="border-b border-slate-100 hover:bg-slate-50">
+                        <TableHead className="w-[180px] font-medium text-slate-500">User</TableHead>
+                        <TableHead className="font-medium text-slate-500">Location</TableHead>
+                        <TableHead className="font-medium text-slate-500">Status</TableHead>
+                        <TableHead className="text-right font-medium text-slate-500">Activity Score</TableHead>
+                        <TableHead className="w-[50px]"></TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
                       {topUsers.map((user) => (
-                        <TableRow key={user.id}>
-                          <TableCell className="font-medium">
+                        <TableRow key={user.id} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
+                          <TableCell className="font-medium py-3">
                             <div className="flex flex-col">
-                              <span>{user.name}</span>
-                              <span className="text-xs text-muted-foreground">{user.age} yrs</span>
+                              <span className="text-slate-900 font-medium">{user.name}</span>
+                              <span className="text-xs text-slate-400">ID: #{user.id.toString().padStart(4, '0')}</span>
                             </div>
                           </TableCell>
-                          <TableCell>{user.location}</TableCell>
+                          <TableCell className="text-slate-600">{user.location}</TableCell>
                           <TableCell>
-                            <Badge variant={user.status === 'Premium' ? 'default' : 'secondary'}>
+                            <Badge variant={user.status === 'Premium' ? 'default' : 'secondary'} 
+                                   className={user.status === 'Premium' ? "bg-brand-navy hover:bg-brand-navy/90" : "bg-slate-100 text-slate-600 hover:bg-slate-200"}>
                               {user.status}
                             </Badge>
                           </TableCell>
-                          <TableCell className="text-right">{user.activityScore}</TableCell>
+                          <TableCell className="text-right font-medium text-slate-700">{user.activityScore}</TableCell>
+                          <TableCell>
+                            <Link href={`/users/${user.id}`}>
+                              <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-brand-blue">
+                                <ArrowRight className="h-4 w-4" />
+                              </Button>
+                            </Link>
+                          </TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -189,38 +204,36 @@ export default function Dashboard() {
           </div>
 
           {/* Verification Queue Table */}
-          <Card>
-            <CardHeader>
-              <CardTitle>New Users Waiting Verification</CardTitle>
+          <Card className="border-none shadow-sm">
+            <CardHeader className="bg-slate-50/50 border-b border-slate-100 rounded-t-xl pb-3">
+              <CardTitle className="text-base font-semibold text-slate-800">New Users Waiting Verification</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="p-0">
               <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Submitted</TableHead>
-                    <TableHead>Documents</TableHead>
-                    <TableHead className="text-right">Action</TableHead>
+                <TableHeader className="bg-slate-50">
+                  <TableRow className="border-b border-slate-100 hover:bg-slate-50">
+                    <TableHead className="font-medium text-slate-500">User ID</TableHead>
+                    <TableHead className="font-medium text-slate-500">Name</TableHead>
+                    <TableHead className="font-medium text-slate-500">Signup Date</TableHead>
+                    <TableHead className="font-medium text-slate-500">Verification Status</TableHead>
+                    <TableHead className="text-right font-medium text-slate-500">Action</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {verificationQueue.map((user) => (
-                    <TableRow key={user.id}>
-                      <TableCell className="font-medium">
-                        <div className="flex items-center gap-2">
-                           {user.name}
-                           <Badge variant="outline" className="text-xs font-normal">Age {user.age}</Badge>
-                        </div>
+                    <TableRow key={user.id} className="border-b border-slate-50 hover:bg-slate-50/50">
+                      <TableCell className="font-mono text-xs text-slate-500">USR-{user.id}</TableCell>
+                      <TableCell className="font-medium text-slate-900">{user.name}</TableCell>
+                      <TableCell className="text-slate-600">{user.submitted}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50">Pending Review</Badge>
                       </TableCell>
-                      <TableCell>{user.location}</TableCell>
-                      <TableCell>{user.submitted}</TableCell>
-                      <TableCell>{user.documents}</TableCell>
                       <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button size="sm" variant="outline" className="h-8 text-destructive hover:text-destructive">Reject</Button>
-                          <Button size="sm" className="h-8">Verify</Button>
-                        </div>
+                         <Link href={`/users/${user.id}`}>
+                            <Button size="sm" variant="outline" className="h-8 text-slate-600 hover:text-brand-blue hover:border-brand-blue">
+                              Review Details
+                            </Button>
+                         </Link>
                       </TableCell>
                     </TableRow>
                   ))}
