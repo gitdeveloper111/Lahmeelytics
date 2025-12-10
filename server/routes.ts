@@ -16,6 +16,55 @@ export async function registerRoutes(
     });
   });
 
+  // Admin login
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { username, password } = req.body;
+
+      if (!username || !password) {
+        return res.status(400).json({ error: "Username and password are required" });
+      }
+
+      const admin = await queryOne<{ id: number; username: string; password: string; name: string }>(
+        `SELECT id, username, password, name FROM admin_users WHERE username = ?`,
+        [username]
+      );
+
+      if (!admin) {
+        return res.status(401).json({ error: "Invalid username or password" });
+      }
+
+      // Note: The password in the database is likely hashed with bcrypt
+      // For now, we'll do a simple comparison - in production, use bcrypt.compare
+      // Check if password matches (passwords in Laravel admin are typically bcrypt hashed)
+      const bcrypt = require('bcryptjs');
+      let passwordMatch = false;
+      
+      try {
+        passwordMatch = await bcrypt.compare(password, admin.password);
+      } catch (e) {
+        // If bcrypt fails, try direct comparison (for testing)
+        passwordMatch = password === admin.password;
+      }
+
+      if (!passwordMatch) {
+        return res.status(401).json({ error: "Invalid username or password" });
+      }
+
+      res.json({
+        success: true,
+        user: {
+          id: admin.id,
+          username: admin.username,
+          name: admin.name,
+        }
+      });
+    } catch (error: any) {
+      console.error('Login error:', error);
+      res.status(500).json({ error: "Login failed" });
+    }
+  });
+
   // Dashboard KPIs
   app.get("/api/dashboard/kpis", async (req, res) => {
     try {

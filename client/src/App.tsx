@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -9,15 +9,37 @@ import UsersPage from "@/pages/users";
 import UserDetailsPage from "@/pages/user-details";
 import VerificationPage from "@/pages/verification";
 import ReportsPage from "@/pages/reports";
+import LoginPage from "@/pages/login";
+
+function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  
+  if (!isLoggedIn) {
+    return <Redirect to="/login" />;
+  }
+  
+  return <Component />;
+}
 
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Dashboard} />
-      <Route path="/users" component={UsersPage} />
-      <Route path="/users/:id" component={UserDetailsPage} />
-      <Route path="/verification" component={VerificationPage} />
-      <Route path="/reports" component={ReportsPage} />
+      <Route path="/login" component={LoginPage} />
+      <Route path="/">
+        <ProtectedRoute component={Dashboard} />
+      </Route>
+      <Route path="/users">
+        <ProtectedRoute component={UsersPage} />
+      </Route>
+      <Route path="/users/:id">
+        <ProtectedRoute component={UserDetailsPage} />
+      </Route>
+      <Route path="/verification">
+        <ProtectedRoute component={VerificationPage} />
+      </Route>
+      <Route path="/reports">
+        <ProtectedRoute component={ReportsPage} />
+      </Route>
       <Route component={NotFound} />
     </Switch>
   );
