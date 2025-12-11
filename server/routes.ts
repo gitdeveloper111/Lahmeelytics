@@ -1,6 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { query, queryOne, testConnection } from "./db";
+import bcrypt from "bcryptjs";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -34,17 +35,21 @@ export async function registerRoutes(
         return res.status(401).json({ error: "Invalid username or password" });
       }
 
-      // Note: The password in the database is likely hashed with bcrypt
-      // For now, we'll do a simple comparison - in production, use bcrypt.compare
-      // Check if password matches (passwords in Laravel admin are typically bcrypt hashed)
-      const bcrypt = require('bcryptjs');
+      // Check if password matches
+      // PHP bcrypt uses $2y$ prefix, Node.js bcryptjs uses $2a$ or $2b$
+      // Convert PHP hash prefix to be compatible with bcryptjs
       let passwordMatch = false;
       
       try {
-        passwordMatch = await bcrypt.compare(password, admin.password);
+        // Convert PHP's $2y$ to bcryptjs-compatible $2a$ if needed
+        let compatibleHash = admin.password;
+        if (admin.password.startsWith('$2y$')) {
+          compatibleHash = admin.password.replace(/^\$2y\$/, '$2a$');
+        }
+        passwordMatch = await bcrypt.compare(password, compatibleHash);
       } catch (e) {
-        // If bcrypt fails, try direct comparison (for testing)
-        passwordMatch = password === admin.password;
+        console.error('Bcrypt comparison error:', e);
+        passwordMatch = false;
       }
 
       if (!passwordMatch) {
