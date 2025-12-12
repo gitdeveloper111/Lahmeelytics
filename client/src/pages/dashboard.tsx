@@ -193,8 +193,8 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <section className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 mb-10">
-          <div className="flex flex-col gap-4 rounded-2xl border border-border-light p-8 bg-white shadow-md col-span-1 xl:col-span-2">
+        <section className="mb-10">
+          <div className="flex flex-col gap-4 rounded-2xl border border-border-light p-8 bg-white shadow-md">
             <div className="flex justify-between items-center">
               <h3 className="text-2xl font-bold text-text-dark">Daily Signups</h3>
               <div className="flex gap-2 items-center">
@@ -208,25 +208,6 @@ export default function Dashboard() {
                 <path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25V149H326.769H0V109Z" fill="url(#paint0_linear_chart_light)"></path>
                 <path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25" stroke="#77aaff" strokeLinecap="round" strokeWidth="3"></path>
                 <defs><linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_chart_light" x1="236" x2="236" y1="1" y2="149"><stop className="chart-gradient-blue"></stop><stop className="chart-gradient-blue-end" offset="1"></stop></linearGradient></defs>
-              </svg>
-            </div>
-          </div>
-          
-          <div className="flex flex-col gap-4 rounded-2xl border border-border-light p-8 bg-white shadow-md">
-            <div className="flex justify-between items-center">
-              <h3 className="text-2xl font-bold text-text-dark">DAU vs MAU</h3>
-              <div className="flex gap-2 items-center">
-                <p className="text-text-medium text-lg font-normal leading-normal">Last 90 Days</p>
-              </div>
-            </div>
-            <p className="text-text-dark tracking-tight text-5xl font-extrabold leading-tight truncate">
-              {engagement?.dau?.length > 0 ? formatNumber(engagement.dau[engagement.dau.length - 1]?.count || 0) : '0'} / {formatNumber(engagement?.mau || 0)}
-            </p>
-            <div className="flex min-h-[220px] flex-1 flex-col justify-end pt-4">
-              <svg fill="none" preserveAspectRatio="none" viewBox="-3 0 478 150" width="100%" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 45C18.1538 45 18.1538 101 36.3077 101C54.4615 101 54.4615 81 72.6154 81C90.7692 81 90.7692 121 108.923 121C127.077 121 127.077 61 145.231 61C163.385 61 163.385 109 181.538 109C199.692 109 199.692 1 217.846 1C236 1 236 21 254.154 21C272.308 21 272.308 93 290.462 93C308.615 93 308.615 25 326.769 25C344.923 25 344.923 129 363.077 129C381.231 129 381.231 149 399.385 149C417.538 149 417.538 41 435.692 41C453.846 41 453.846 33 472 33V149H0V45Z" fill="url(#paint0_linear_chart_light_2)"></path>
-                <path d="M0 45C18.1538 45 18.1538 101 36.3077 101C54.4615 101 54.4615 81 72.6154 81C90.7692 81 90.7692 121 108.923 121C127.077 121 127.077 61 145.231 61C163.385 61 163.385 109 181.538 109C199.692 109 199.692 1 217.846 1C236 1 236 21 254.154 21C272.308 21 272.308 93 290.462 93C308.615 93 308.615 25 326.769 25C344.923 25 344.923 129 363.077 129C381.231 129 381.231 149 399.385 149C417.538 149 417.538 41 435.692 41C453.846 41 453.846 33 472 33" stroke="#77aaff" strokeLinecap="round" strokeWidth="3"></path>
-                <defs><linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_chart_light_2" x1="236" x2="236" y1="1" y2="149"><stop className="chart-gradient-blue"></stop><stop className="chart-gradient-blue-end" offset="1"></stop></linearGradient></defs>
               </svg>
             </div>
           </div>
