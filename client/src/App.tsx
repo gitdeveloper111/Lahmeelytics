@@ -12,11 +12,11 @@ import ReportsPage from "@/pages/reports";
 import LoginPage from "@/pages/login";
 
 function ProtectedRoute({ component: Component }: { component: React.ComponentType }) {
-  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
-  
-  if (!isLoggedIn) {
-    return <Redirect to="/login" />;
-  }
+  // TEMPORARILY DISABLED FOR TESTING - uncomment below to re-enable login
+  // const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  // if (!isLoggedIn) {
+  //   return <Redirect to="/login" />;
+  // }
   
   return <Component />;
 }
