@@ -23,17 +23,19 @@ export function Sidebar() {
     <aside className="flex-shrink-0 w-64 bg-white border-r border-border-light shadow-sm hidden lg:block">
       <div className="flex h-full min-h-[700px] flex-col justify-between p-6">
         <div className="flex flex-col gap-6">
-          <div className="flex items-center gap-3 p-2">
-            <div 
-              className="bg-gradient-to-br from-soft-peach to-muted-teal flex items-center justify-center rounded-full size-10 text-white font-bold" 
-            >
-              L
-            </div>
-            <div className="flex flex-col">
-              <h1 className="text-text-dark text-lg font-bold leading-normal">Lahmee</h1>
-              <p className="text-text-medium text-sm font-normal leading-normal">Admin Dashboard</p>
-            </div>
-          </div>
+          <Link href="/">
+            <a className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer" data-testid="link-logo-dashboard">
+              <div 
+                className="bg-gradient-to-br from-soft-peach to-muted-teal flex items-center justify-center rounded-full size-10 text-white font-bold" 
+              >
+                L
+              </div>
+              <div className="flex flex-col">
+                <h1 className="text-text-dark text-lg font-bold leading-normal">Lahmee</h1>
+                <p className="text-text-medium text-sm font-normal leading-normal">Admin Dashboard</p>
+              </div>
+            </a>
+          </Link>
           
           <nav className="flex flex-col gap-2 mt-4">
             {navItems.map((item) => {
