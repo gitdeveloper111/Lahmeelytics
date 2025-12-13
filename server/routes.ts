@@ -349,7 +349,8 @@ export async function registerRoutes(
 
       const users = await query(
         `SELECT u.id, u.first_name, u.last_name, u.code_name, u.country, u.gender,
-                COUNT(f.id) as favorite_count
+                COUNT(f.id) as favorite_count,
+                (SELECT p.image FROM photos p WHERE p.user_id = u.id ORDER BY p.order ASC LIMIT 1) as profile_photo
          FROM users u
          JOIN favourite_profiles f ON f.favourited = u.id AND f.deleted_at IS NULL
          WHERE u.deleted_at IS NULL${genderFilter}

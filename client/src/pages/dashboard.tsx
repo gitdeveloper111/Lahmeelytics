@@ -227,6 +227,7 @@ export default function Dashboard() {
               <table className="w-full text-left text-base">
                 <thead className="text-xs text-text-medium uppercase bg-gray-50 border-b border-border-light">
                   <tr>
+                    <th className="px-6 py-4 font-semibold w-16" scope="col"></th>
                     <th className="px-6 py-4 font-semibold" scope="col">User</th>
                     <th className="px-6 py-4 font-semibold" scope="col">Country</th>
                     <th className="px-6 py-4 font-semibold text-right" scope="col">Favorites</th>
@@ -236,6 +237,7 @@ export default function Dashboard() {
                   {topWomenLoading ? (
                     Array.from({ length: 5 }).map((_, i) => (
                       <tr key={i} className="border-b border-border-light">
+                        <td className="px-6 py-4"><Skeleton className="h-10 w-10 rounded-full" /></td>
                         <td className="px-6 py-4"><Skeleton className="h-4 w-32" /></td>
                         <td className="px-6 py-4"><Skeleton className="h-4 w-20" /></td>
                         <td className="px-6 py-4 text-right"><Skeleton className="h-4 w-12 ml-auto" /></td>
@@ -244,6 +246,21 @@ export default function Dashboard() {
                   ) : topFavoritedWomen?.length > 0 ? (
                     topFavoritedWomen.map((user: any, idx: number) => (
                       <tr key={user.id} className="border-b border-border-light hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4">
+                          <Link href={`/users/${user.id}`} className="block">
+                            {user.profile_photo ? (
+                              <img 
+                                src={`https://admin.lahmee.com/${user.profile_photo}`} 
+                                alt={user.first_name || user.code_name}
+                                className="w-10 h-10 rounded-full object-cover border-2 border-soft-peach hover:border-muted-teal transition-colors"
+                              />
+                            ) : (
+                              <div className="w-10 h-10 rounded-full bg-soft-peach flex items-center justify-center text-text-dark font-bold text-sm">
+                                {(user.first_name || user.code_name || '?').charAt(0).toUpperCase()}
+                              </div>
+                            )}
+                          </Link>
+                        </td>
                         <td className="px-6 py-4 font-medium text-text-dark">
                           <span className="text-soft-peach font-bold mr-2">#{idx + 1}</span>
                           <Link href={`/users/${user.id}`} className="hover:text-muted-teal hover:underline">
@@ -256,7 +273,7 @@ export default function Dashboard() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={3} className="px-6 py-5 text-center text-text-medium">No data available</td>
+                      <td colSpan={4} className="px-6 py-5 text-center text-text-medium">No data available</td>
                     </tr>
                   )}
                 </tbody>
@@ -272,6 +289,7 @@ export default function Dashboard() {
               <table className="w-full text-left text-base">
                 <thead className="text-xs text-text-medium uppercase bg-gray-50 border-b border-border-light">
                   <tr>
+                    <th className="px-6 py-4 font-semibold w-16" scope="col"></th>
                     <th className="px-6 py-4 font-semibold" scope="col">User</th>
                     <th className="px-6 py-4 font-semibold" scope="col">Country</th>
                     <th className="px-6 py-4 font-semibold text-right" scope="col">Favorites</th>
@@ -281,6 +299,7 @@ export default function Dashboard() {
                   {topMenLoading ? (
                     Array.from({ length: 5 }).map((_, i) => (
                       <tr key={i} className="border-b border-border-light">
+                        <td className="px-6 py-4"><Skeleton className="h-10 w-10 rounded-full" /></td>
                         <td className="px-6 py-4"><Skeleton className="h-4 w-32" /></td>
                         <td className="px-6 py-4"><Skeleton className="h-4 w-20" /></td>
                         <td className="px-6 py-4 text-right"><Skeleton className="h-4 w-12 ml-auto" /></td>
@@ -289,6 +308,21 @@ export default function Dashboard() {
                   ) : topFavoritedMen?.length > 0 ? (
                     topFavoritedMen.map((user: any, idx: number) => (
                       <tr key={user.id} className="border-b border-border-light hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4">
+                          <Link href={`/users/${user.id}`} className="block">
+                            {user.profile_photo ? (
+                              <img 
+                                src={`https://admin.lahmee.com/${user.profile_photo}`} 
+                                alt={user.first_name || user.code_name}
+                                className="w-10 h-10 rounded-full object-cover border-2 border-muted-teal hover:border-soft-peach transition-colors"
+                              />
+                            ) : (
+                              <div className="w-10 h-10 rounded-full bg-muted-teal/30 flex items-center justify-center text-text-dark font-bold text-sm">
+                                {(user.first_name || user.code_name || '?').charAt(0).toUpperCase()}
+                              </div>
+                            )}
+                          </Link>
+                        </td>
                         <td className="px-6 py-4 font-medium text-text-dark">
                           <span className="text-muted-teal font-bold mr-2">#{idx + 1}</span>
                           <Link href={`/users/${user.id}`} className="hover:text-muted-teal hover:underline">
@@ -301,7 +335,7 @@ export default function Dashboard() {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={3} className="px-6 py-5 text-center text-text-medium">No data available</td>
+                      <td colSpan={4} className="px-6 py-5 text-center text-text-medium">No data available</td>
                     </tr>
                   )}
                 </tbody>
