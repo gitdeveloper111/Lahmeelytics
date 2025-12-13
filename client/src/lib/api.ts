@@ -46,6 +46,12 @@ export async function fetchCountries() {
   return res.json();
 }
 
+export async function fetchTopFavorited(gender: string) {
+  const res = await fetch(`${API_BASE}/dashboard/top-favorited?gender=${gender}`);
+  if (!res.ok) throw new Error('Failed to fetch top favorited');
+  return res.json();
+}
+
 export async function fetchUserDetails(userId: string) {
   const res = await fetch(`${API_BASE}/users/${userId}`);
   if (!res.ok) {

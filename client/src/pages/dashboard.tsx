@@ -1,7 +1,7 @@
 import { Sidebar } from "@/components/layout/Sidebar";
 import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
-import { fetchKPIs, fetchTopUsers, fetchVerificationQueue, fetchSignupsTrend, fetchEngagement, fetchCountries } from "@/lib/api";
+import { fetchKPIs, fetchTopUsers, fetchVerificationQueue, fetchSignupsTrend, fetchCountries, fetchTopFavorited } from "@/lib/api";
 import { useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -56,9 +56,14 @@ export default function Dashboard() {
     queryFn: fetchSignupsTrend,
   });
 
-  const { data: engagement } = useQuery({
-    queryKey: ['engagement'],
-    queryFn: fetchEngagement,
+  const { data: topFavoritedWomen, isLoading: topWomenLoading } = useQuery({
+    queryKey: ['topFavoritedWomen'],
+    queryFn: () => fetchTopFavorited('Female'),
+  });
+
+  const { data: topFavoritedMen, isLoading: topMenLoading } = useQuery({
+    queryKey: ['topFavoritedMen'],
+    queryFn: () => fetchTopFavorited('Male'),
   });
 
   const { data: countries } = useQuery({
@@ -209,6 +214,98 @@ export default function Dashboard() {
                 <path d="M0 109C18.1538 109 18.1538 21 36.3077 21C54.4615 21 54.4615 41 72.6154 41C90.7692 41 90.7692 93 108.923 93C127.077 93 127.077 33 145.231 33C163.385 33 163.385 101 181.538 101C199.692 101 199.692 61 217.846 61C236 61 236 45 254.154 45C272.308 45 272.308 121 290.462 121C308.615 121 308.615 149 326.769 149C344.923 149 344.923 1 363.077 1C381.231 1 381.231 81 399.385 81C417.538 81 417.538 129 435.692 129C453.846 129 453.846 25 472 25" stroke="#77aaff" strokeLinecap="round" strokeWidth="3"></path>
                 <defs><linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_chart_light" x1="236" x2="236" y1="1" y2="149"><stop className="chart-gradient-blue"></stop><stop className="chart-gradient-blue-end" offset="1"></stop></linearGradient></defs>
               </svg>
+            </div>
+          </div>
+        </section>
+
+        <section className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+          <div className="flex flex-col rounded-2xl border border-border-light bg-white shadow-md overflow-hidden">
+            <div className="p-8 bg-soft-peach/30">
+              <h3 className="text-2xl font-bold text-text-dark">Top 10 Most Favorited Women</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-base">
+                <thead className="text-xs text-text-medium uppercase bg-gray-50 border-b border-border-light">
+                  <tr>
+                    <th className="px-6 py-4 font-semibold" scope="col">User</th>
+                    <th className="px-6 py-4 font-semibold" scope="col">Country</th>
+                    <th className="px-6 py-4 font-semibold text-right" scope="col">Favorites</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {topWomenLoading ? (
+                    Array.from({ length: 5 }).map((_, i) => (
+                      <tr key={i} className="border-b border-border-light">
+                        <td className="px-6 py-4"><Skeleton className="h-4 w-32" /></td>
+                        <td className="px-6 py-4"><Skeleton className="h-4 w-20" /></td>
+                        <td className="px-6 py-4 text-right"><Skeleton className="h-4 w-12 ml-auto" /></td>
+                      </tr>
+                    ))
+                  ) : topFavoritedWomen?.length > 0 ? (
+                    topFavoritedWomen.map((user: any, idx: number) => (
+                      <tr key={user.id} className="border-b border-border-light hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4 font-medium text-text-dark">
+                          <span className="text-soft-peach font-bold mr-2">#{idx + 1}</span>
+                          <Link href={`/users/${user.id}`} className="hover:text-muted-teal hover:underline">
+                            {user.first_name || user.code_name} {user.last_name || ''}
+                          </Link>
+                        </td>
+                        <td className="px-6 py-4 text-text-medium">{user.country || 'N/A'}</td>
+                        <td className="px-6 py-4 text-right font-bold text-muted-teal">{user.favorite_count}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={3} className="px-6 py-5 text-center text-text-medium">No data available</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          <div className="flex flex-col rounded-2xl border border-border-light bg-white shadow-md overflow-hidden">
+            <div className="p-8 bg-muted-teal/20">
+              <h3 className="text-2xl font-bold text-text-dark">Top 10 Most Favorited Men</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-base">
+                <thead className="text-xs text-text-medium uppercase bg-gray-50 border-b border-border-light">
+                  <tr>
+                    <th className="px-6 py-4 font-semibold" scope="col">User</th>
+                    <th className="px-6 py-4 font-semibold" scope="col">Country</th>
+                    <th className="px-6 py-4 font-semibold text-right" scope="col">Favorites</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {topMenLoading ? (
+                    Array.from({ length: 5 }).map((_, i) => (
+                      <tr key={i} className="border-b border-border-light">
+                        <td className="px-6 py-4"><Skeleton className="h-4 w-32" /></td>
+                        <td className="px-6 py-4"><Skeleton className="h-4 w-20" /></td>
+                        <td className="px-6 py-4 text-right"><Skeleton className="h-4 w-12 ml-auto" /></td>
+                      </tr>
+                    ))
+                  ) : topFavoritedMen?.length > 0 ? (
+                    topFavoritedMen.map((user: any, idx: number) => (
+                      <tr key={user.id} className="border-b border-border-light hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4 font-medium text-text-dark">
+                          <span className="text-muted-teal font-bold mr-2">#{idx + 1}</span>
+                          <Link href={`/users/${user.id}`} className="hover:text-muted-teal hover:underline">
+                            {user.first_name || user.code_name} {user.last_name || ''}
+                          </Link>
+                        </td>
+                        <td className="px-6 py-4 text-text-medium">{user.country || 'N/A'}</td>
+                        <td className="px-6 py-4 text-right font-bold text-muted-teal">{user.favorite_count}</td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={3} className="px-6 py-5 text-center text-text-medium">No data available</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
           </div>
         </section>

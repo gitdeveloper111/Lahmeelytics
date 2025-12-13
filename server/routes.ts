@@ -335,6 +335,36 @@ export async function registerRoutes(
     }
   });
 
+  // Top favorited users by gender
+  app.get("/api/dashboard/top-favorited", async (req, res) => {
+    try {
+      const { gender } = req.query;
+      
+      let genderFilter = '';
+      const params: any[] = [];
+      if (gender) {
+        genderFilter = ' AND u.gender = ?';
+        params.push(gender);
+      }
+
+      const users = await query(
+        `SELECT u.id, u.first_name, u.last_name, u.code_name, u.country, u.gender,
+                COUNT(f.id) as favorite_count
+         FROM users u
+         JOIN favourite_profiles f ON f.favourited = u.id AND f.deleted_at IS NULL
+         WHERE u.deleted_at IS NULL${genderFilter}
+         GROUP BY u.id
+         ORDER BY favorite_count DESC
+         LIMIT 10`,
+        params
+      );
+      res.json(users);
+    } catch (error: any) {
+      console.error('Top favorited error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Get list of countries for filter
   app.get("/api/countries", async (_req, res) => {
     try {
