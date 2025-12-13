@@ -1,4 +1,5 @@
 import { Sidebar } from "@/components/layout/Sidebar";
+import { MobileHeader } from "@/components/layout/MobileHeader";
 import { useQuery } from "@tanstack/react-query";
 import { fetchVerificationQueue } from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -21,8 +22,9 @@ export default function VerificationPage() {
       <Sidebar />
       
       <main className="flex-1 overflow-y-auto p-4 md:p-10">
+        <MobileHeader title="Verification" />
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-8">
-          <div>
+          <div className="hidden lg:block">
             <h1 className="text-3xl md:text-5xl font-extrabold leading-tight tracking-[-0.04em] text-text-dark">Verification</h1>
             <p className="text-text-medium mt-2">Review and verify new user registrations</p>
           </div>

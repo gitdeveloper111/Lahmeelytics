@@ -1,4 +1,5 @@
 import { Sidebar } from "@/components/layout/Sidebar";
+import { MobileHeader } from "@/components/layout/MobileHeader";
 import { useQuery } from "@tanstack/react-query";
 import { fetchUserDetails } from "@/lib/api";
 import { useRoute, Link } from "wouter";
@@ -57,7 +58,8 @@ export default function UserDetailsPage() {
       <Sidebar />
       
       <main className="flex-1 overflow-y-auto p-4 md:p-10">
-        <Link href="/users" className="inline-flex items-center gap-2 text-text-medium hover:text-muted-teal mb-6 transition-colors" data-testid="link-back-users">
+        <MobileHeader title="User Details" />
+        <Link href="/users" className="hidden lg:inline-flex items-center gap-2 text-text-medium hover:text-muted-teal mb-6 transition-colors" data-testid="link-back-users">
           <span className="material-symbols-outlined text-lg">arrow_back</span>
           <span>Back to Users</span>
         </Link>
