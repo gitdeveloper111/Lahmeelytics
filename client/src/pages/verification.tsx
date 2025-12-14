@@ -127,10 +127,10 @@ export default function VerificationPage() {
                           <button 
                             onClick={() => handleVerify(user.id)}
                             disabled={loadingId === user.id}
-                            data-testid={`button-verify-${user.id}`}
+                            data-testid={`button-approve-${user.id}`}
                             className="bg-muted-teal/30 text-text-dark font-semibold py-2 px-4 rounded-lg text-sm hover:bg-muted-teal/40 transition-colors disabled:opacity-50"
                           >
-                            {loadingId === user.id && verifyMutation.isPending ? 'Verifying...' : 'Verify'}
+                            {loadingId === user.id && verifyMutation.isPending ? 'Approving...' : 'Approve'}
                           </button>
                         </div>
                       </td>

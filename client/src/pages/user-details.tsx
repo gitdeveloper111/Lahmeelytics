@@ -1,9 +1,10 @@
 import { Sidebar } from "@/components/layout/Sidebar";
 import { MobileHeader } from "@/components/layout/MobileHeader";
-import { useQuery } from "@tanstack/react-query";
-import { fetchUserDetails } from "@/lib/api";
-import { useRoute, Link } from "wouter";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { fetchUserDetails, verifyUser, rejectUser } from "@/lib/api";
+import { useRoute, Link, useLocation } from "wouter";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useState } from "react";
 
 function formatDate(dateStr: string): string {
   if (!dateStr) return 'N/A';
@@ -42,12 +43,55 @@ function calculateAge(dateOfBirth: string): number | null {
 export default function UserDetailsPage() {
   const [match, params] = useRoute("/users/:id");
   const userId = params?.id;
+  const queryClient = useQueryClient();
+  const [, navigate] = useLocation();
+  const [actionLoading, setActionLoading] = useState<'approve' | 'reject' | null>(null);
 
   const { data: user, isLoading, error } = useQuery({
     queryKey: ['user', userId],
     queryFn: () => fetchUserDetails(userId!),
     enabled: !!userId,
   });
+
+  const approveMutation = useMutation({
+    mutationFn: verifyUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user', userId] });
+      queryClient.invalidateQueries({ queryKey: ['verificationQueue'] });
+      queryClient.invalidateQueries({ queryKey: ['kpis'] });
+      setActionLoading(null);
+    },
+    onError: () => {
+      setActionLoading(null);
+    },
+  });
+
+  const rejectMutation = useMutation({
+    mutationFn: rejectUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user', userId] });
+      queryClient.invalidateQueries({ queryKey: ['verificationQueue'] });
+      queryClient.invalidateQueries({ queryKey: ['kpis'] });
+      setActionLoading(null);
+    },
+    onError: () => {
+      setActionLoading(null);
+    },
+  });
+
+  const handleApprove = () => {
+    if (userId) {
+      setActionLoading('approve');
+      approveMutation.mutate(Number(userId));
+    }
+  };
+
+  const handleReject = () => {
+    if (userId) {
+      setActionLoading('reject');
+      rejectMutation.mutate(Number(userId));
+    }
+  };
 
   if (!match) {
     return null;
@@ -93,11 +137,21 @@ export default function UserDetailsPage() {
               <div className="flex gap-3">
                 {!isLoading && user?.status === 'pending' && (
                   <>
-                    <button className="bg-red-100 text-red-600 font-semibold py-2 px-6 rounded-lg hover:bg-red-200 transition-colors" data-testid="button-reject">
-                      Reject
+                    <button 
+                      onClick={handleReject}
+                      disabled={actionLoading !== null}
+                      className="bg-red-100 text-red-600 font-semibold py-2 px-6 rounded-lg hover:bg-red-200 transition-colors disabled:opacity-50" 
+                      data-testid="button-reject"
+                    >
+                      {actionLoading === 'reject' ? 'Rejecting...' : 'Reject'}
                     </button>
-                    <button className="bg-muted-teal text-white font-semibold py-2 px-6 rounded-lg hover:bg-muted-teal/90 transition-colors" data-testid="button-verify">
-                      Verify User
+                    <button 
+                      onClick={handleApprove}
+                      disabled={actionLoading !== null}
+                      className="bg-muted-teal text-white font-semibold py-2 px-6 rounded-lg hover:bg-muted-teal/90 transition-colors disabled:opacity-50" 
+                      data-testid="button-approve"
+                    >
+                      {actionLoading === 'approve' ? 'Approving...' : 'Approve User'}
                     </button>
                   </>
                 )}
