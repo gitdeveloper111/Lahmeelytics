@@ -156,6 +156,36 @@ export default function UserDetailsPage() {
               </div>
             </div>
 
+            {user?.photos && user.photos.length > 0 && (
+              <div className="flex flex-col rounded-2xl border border-border-light bg-white shadow-md overflow-hidden mb-10">
+                <div className="p-6 border-b border-border-light bg-gray-50">
+                  <h3 className="text-xl font-bold text-text-dark">Photos ({user.photos.length})</h3>
+                </div>
+                <div className="p-6">
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                    {user.photos.map((photo: any, idx: number) => (
+                      <div key={photo.id} className="relative aspect-square rounded-xl overflow-hidden border border-border-light shadow-sm">
+                        <img 
+                          src={`https://admin.lahmee.com/${photo.image}`}
+                          alt={`Photo ${idx + 1}`}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"%3E%3Crect fill="%23f0f0f0" width="100" height="100"/%3E%3Ctext x="50" y="55" text-anchor="middle" fill="%23999" font-size="14"%3ENo Image%3C/text%3E%3C/svg%3E';
+                          }}
+                          data-testid={`img-photo-${photo.id}`}
+                        />
+                        {idx === 0 && (
+                          <span className="absolute top-2 left-2 bg-soft-peach/90 text-text-dark text-xs font-semibold px-2 py-1 rounded">
+                            Main
+                          </span>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
               <div className="flex flex-col rounded-2xl border border-border-light bg-white shadow-md overflow-hidden">
                 <div className="p-6 border-b border-border-light bg-gray-50">

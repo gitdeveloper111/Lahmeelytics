@@ -299,6 +299,15 @@ export async function registerRoutes(
         [id]
       );
 
+      // Get user photos
+      const photos = await query(
+        `SELECT id, image, \`order\` 
+         FROM photos 
+         WHERE user_id = ? 
+         ORDER BY \`order\` ASC`,
+        [id]
+      );
+
       // Get match counts - wrapped in try/catch to handle potential schema differences
       let sentRequests = 0;
       let receivedRequests = 0;
@@ -322,6 +331,7 @@ export async function registerRoutes(
 
       res.json({
         ...user,
+        photos: photos || [],
         subscription: subscription || null,
         stats: {
           sentRequests,
