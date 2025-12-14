@@ -376,6 +376,48 @@ export async function registerRoutes(
     }
   });
 
+  // Verify user
+  app.post("/api/users/:id/verify", async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      if (!id || isNaN(Number(id))) {
+        return res.status(400).json({ error: "Invalid user ID" });
+      }
+
+      await query(
+        `UPDATE users SET status = 'approved' WHERE id = ? AND deleted_at IS NULL`,
+        [id]
+      );
+
+      res.json({ success: true, message: "User verified successfully" });
+    } catch (error: any) {
+      console.error('Verify user error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Reject user
+  app.post("/api/users/:id/reject", async (req, res) => {
+    try {
+      const { id } = req.params;
+      
+      if (!id || isNaN(Number(id))) {
+        return res.status(400).json({ error: "Invalid user ID" });
+      }
+
+      await query(
+        `UPDATE users SET status = 'rejected' WHERE id = ? AND deleted_at IS NULL`,
+        [id]
+      );
+
+      res.json({ success: true, message: "User rejected successfully" });
+    } catch (error: any) {
+      console.error('Reject user error:', error);
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // Get list of countries for filter
   app.get("/api/countries", async (_req, res) => {
     try {

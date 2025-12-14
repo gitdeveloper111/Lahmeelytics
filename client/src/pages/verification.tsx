@@ -1,9 +1,10 @@
 import { Sidebar } from "@/components/layout/Sidebar";
 import { MobileHeader } from "@/components/layout/MobileHeader";
-import { useQuery } from "@tanstack/react-query";
-import { fetchVerificationQueue } from "@/lib/api";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { fetchVerificationQueue, verifyUser, rejectUser } from "@/lib/api";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "wouter";
+import { useState } from "react";
 
 function formatDate(dateStr: string): string {
   if (!dateStr) return 'N/A';
@@ -12,10 +13,47 @@ function formatDate(dateStr: string): string {
 }
 
 export default function VerificationPage() {
+  const queryClient = useQueryClient();
+  const [loadingId, setLoadingId] = useState<number | null>(null);
+
   const { data: queue, isLoading } = useQuery({
     queryKey: ['verificationQueue'],
     queryFn: fetchVerificationQueue,
   });
+
+  const verifyMutation = useMutation({
+    mutationFn: verifyUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['verificationQueue'] });
+      queryClient.invalidateQueries({ queryKey: ['kpis'] });
+      setLoadingId(null);
+    },
+    onError: () => {
+      setLoadingId(null);
+    },
+  });
+
+  const rejectMutation = useMutation({
+    mutationFn: rejectUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['verificationQueue'] });
+      queryClient.invalidateQueries({ queryKey: ['kpis'] });
+      setLoadingId(null);
+    },
+    onError: () => {
+      setLoadingId(null);
+    },
+  });
+
+  const handleVerify = (userId: number) => {
+    setLoadingId(userId);
+    verifyMutation.mutate(userId);
+  };
+
+  const handleReject = (userId: number) => {
+    setLoadingId(userId);
+    rejectMutation.mutate(userId);
+  };
 
   return (
     <div className="relative flex h-auto min-h-screen w-full bg-off-white font-sans text-text-dark antialiased">
@@ -78,11 +116,21 @@ export default function VerificationPage() {
                       <td className="px-8 py-5 text-text-medium capitalize">{user.gender || 'N/A'}</td>
                       <td className="px-8 py-5 text-right">
                         <div className="flex gap-2 justify-end">
-                          <button className="bg-red-100 text-red-600 font-semibold py-2 px-4 rounded-lg text-sm hover:bg-red-200 transition-colors">
-                            Reject
+                          <button 
+                            onClick={() => handleReject(user.id)}
+                            disabled={loadingId === user.id}
+                            data-testid={`button-reject-${user.id}`}
+                            className="bg-red-100 text-red-600 font-semibold py-2 px-4 rounded-lg text-sm hover:bg-red-200 transition-colors disabled:opacity-50"
+                          >
+                            {loadingId === user.id && rejectMutation.isPending ? 'Rejecting...' : 'Reject'}
                           </button>
-                          <button className="bg-muted-teal/30 text-text-dark font-semibold py-2 px-4 rounded-lg text-sm hover:bg-muted-teal/40 transition-colors">
-                            Verify
+                          <button 
+                            onClick={() => handleVerify(user.id)}
+                            disabled={loadingId === user.id}
+                            data-testid={`button-verify-${user.id}`}
+                            className="bg-muted-teal/30 text-text-dark font-semibold py-2 px-4 rounded-lg text-sm hover:bg-muted-teal/40 transition-colors disabled:opacity-50"
+                          >
+                            {loadingId === user.id && verifyMutation.isPending ? 'Verifying...' : 'Verify'}
                           </button>
                         </div>
                       </td>

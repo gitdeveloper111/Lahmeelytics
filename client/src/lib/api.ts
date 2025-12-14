@@ -60,3 +60,21 @@ export async function fetchUserDetails(userId: string) {
   }
   return res.json();
 }
+
+export async function verifyUser(userId: number) {
+  const res = await fetch(`${API_BASE}/users/${userId}/verify`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  });
+  if (!res.ok) throw new Error('Failed to verify user');
+  return res.json();
+}
+
+export async function rejectUser(userId: number) {
+  const res = await fetch(`${API_BASE}/users/${userId}/reject`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  });
+  if (!res.ok) throw new Error('Failed to reject user');
+  return res.json();
+}
