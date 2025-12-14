@@ -252,13 +252,17 @@ export default function Dashboard() {
                               <img 
                                 src={`https://admin.lahmee.com/${user.profile_photo}`} 
                                 alt={user.first_name || user.code_name}
-                                className="w-10 h-10 rounded-full object-cover border-2 border-soft-peach hover:border-muted-teal transition-colors"
+                                className="w-10 h-10 rounded-full object-cover border-2 border-soft-peach hover:border-muted-teal transition-colors bg-soft-peach/30"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.style.display = 'none';
+                                  target.nextElementSibling?.classList.remove('hidden');
+                                }}
                               />
-                            ) : (
-                              <div className="w-10 h-10 rounded-full bg-soft-peach flex items-center justify-center text-text-dark font-bold text-sm">
-                                {(user.first_name || user.code_name || '?').charAt(0).toUpperCase()}
-                              </div>
-                            )}
+                            ) : null}
+                            <div className={`w-10 h-10 rounded-full bg-soft-peach flex items-center justify-center text-text-dark font-bold text-sm ${user.profile_photo ? 'hidden' : ''}`}>
+                              {(user.first_name || user.code_name || '?').charAt(0).toUpperCase()}
+                            </div>
                           </Link>
                         </td>
                         <td className="px-6 py-4 font-medium text-text-dark">
@@ -314,13 +318,17 @@ export default function Dashboard() {
                               <img 
                                 src={`https://admin.lahmee.com/${user.profile_photo}`} 
                                 alt={user.first_name || user.code_name}
-                                className="w-10 h-10 rounded-full object-cover border-2 border-muted-teal hover:border-soft-peach transition-colors"
+                                className="w-10 h-10 rounded-full object-cover border-2 border-muted-teal hover:border-soft-peach transition-colors bg-muted-teal/20"
+                                onError={(e) => {
+                                  const target = e.target as HTMLImageElement;
+                                  target.style.display = 'none';
+                                  target.nextElementSibling?.classList.remove('hidden');
+                                }}
                               />
-                            ) : (
-                              <div className="w-10 h-10 rounded-full bg-muted-teal/30 flex items-center justify-center text-text-dark font-bold text-sm">
-                                {(user.first_name || user.code_name || '?').charAt(0).toUpperCase()}
-                              </div>
-                            )}
+                            ) : null}
+                            <div className={`w-10 h-10 rounded-full bg-muted-teal/30 flex items-center justify-center text-text-dark font-bold text-sm ${user.profile_photo ? 'hidden' : ''}`}>
+                              {(user.first_name || user.code_name || '?').charAt(0).toUpperCase()}
+                            </div>
                           </Link>
                         </td>
                         <td className="px-6 py-4 font-medium text-text-dark">
